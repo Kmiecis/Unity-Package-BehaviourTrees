@@ -198,13 +198,7 @@
 
                 if (!CanExecute())
                 {
-                    _status = BT_EStatus.Failure;
-
-                    FinishDecorators(BT_EStatus.Failure);
-
-                    FinishConditionals(BT_EStatus.Failure);
-
-                    return _status;
+                    return _status = BT_EStatus.Failure;
                 }
 
                 StartDecorators();
@@ -262,11 +256,11 @@
             if (_status == BT_EStatus.Running)
             {
                 OnFinish(BT_EStatus.Failure);
+
+                FinishDecorators(BT_EStatus.Failure);
+
+                FinishConditionals(BT_EStatus.Failure);
             }
-
-            FinishDecorators(BT_EStatus.Failure);
-
-            FinishConditionals(BT_EStatus.Failure);
         }
 
         public override string ToString()
