@@ -43,13 +43,13 @@ namespace Common.BehaviourTrees
 
         public override BT_EStatus Decorate(BT_EStatus status)
         {
-            if (status == BT_EStatus.Success)
+            if (status != BT_EStatus.Running)
             {
                 if (Remaining > 0.0f)
                 {
                     return BT_EStatus.Running;
                 }
-                return BT_EStatus.Success;
+                return status;
             }
 
             return status;

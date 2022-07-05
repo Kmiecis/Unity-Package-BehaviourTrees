@@ -23,14 +23,21 @@ namespace Common.BehaviourTrees
             get => _remaining;
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            _remaining = _repeats;
+        }
+
         public override BT_EStatus Decorate(BT_EStatus status)
         {
-            if (status == BT_EStatus.Success)
+            if (status != BT_EStatus.Running)
             {
                 _remaining -= 1;
-                if (_remaining == -1)
+                if (_remaining == 0)
                 {
-                    return BT_EStatus.Success;
+                    return status;
                 }
                 return BT_EStatus.Running;
             }
@@ -38,16 +45,9 @@ namespace Common.BehaviourTrees
             return status;
         }
 
-        protected override void OnStart()
-        {
-            base.OnStart();
-
-            _remaining = _repeats - 1;
-        }
-
         public override string ToString()
         {
-            var remaining = _remaining > -2 ? Math.Max(_remaining, 0).ToString() : "inf";
+            var remaining = _remaining > -1 ? Math.Max(_remaining, 0).ToString() : "inf";
             return base.ToString() + " [" + remaining + "]";
         }
     }

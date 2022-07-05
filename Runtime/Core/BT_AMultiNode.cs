@@ -48,9 +48,9 @@
             _current = 0;
         }
 
-        protected override void OnFinish(BT_EStatus status)
+        protected override void OnFinish()
         {
-            base.OnFinish(status);
+            base.OnFinish();
 
             AbortTasks();
         }

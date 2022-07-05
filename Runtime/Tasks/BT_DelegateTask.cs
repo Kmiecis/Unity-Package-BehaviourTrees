@@ -9,7 +9,7 @@ namespace Common.BehaviourTrees
     {
         private Action _onStart;
         private Func<BT_EStatus> _onUpdate;
-        private Action<BT_EStatus> _onFinish;
+        private Action _onFinish;
 
         public BT_DelegateTask(string name = "Delegate") :
             base(name)
@@ -26,7 +26,7 @@ namespace Common.BehaviourTrees
             set => _onUpdate = value;
         }
 
-        public Action<BT_EStatus> OnFinishAction
+        public Action OnFinishAction
         {
             set => _onFinish = value;
         }
@@ -47,11 +47,11 @@ namespace Common.BehaviourTrees
             return BT_EStatus.Success;
         }
 
-        protected override void OnFinish(BT_EStatus status)
+        protected override void OnFinish()
         {
-            base.OnFinish(status);
+            base.OnFinish();
 
-            _onFinish?.Invoke(status);
+            _onFinish?.Invoke();
         }
     }
 }

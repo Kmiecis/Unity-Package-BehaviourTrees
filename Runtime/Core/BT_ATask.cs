@@ -194,72 +194,49 @@
 
             if (_status != BT_EStatus.Running)
             {
-                StartConditionals();
-
-                if (!CanExecute())
-                {
-                    return _status = BT_EStatus.Failure;
-                }
-
-                StartDecorators();
-
                 OnStart();
             }
-            else
+
+            if (!CanExecute())
             {
-                if (!CanExecute())
-                {
-                    OnFinish(BT_EStatus.Failure);
-
-                    FinishDecorators(BT_EStatus.Failure);
-
-                    FinishConditionals(BT_EStatus.Failure);
-
-                    return _status;
-                }
+                return BT_EStatus.Failure;
             }
 
-            var result = OnUpdate();
-            
-            var decorated = Decorate(result);
-            
-            if (decorated != BT_EStatus.Running)
-            {
-                OnFinish(decorated);
+            _status = OnUpdate();
 
-                FinishDecorators(decorated);
+            var decorated = Decorate(_status);
 
-                FinishConditionals(decorated);
-            }
-            else if (result != BT_EStatus.Running)
+            if (_status != BT_EStatus.Running)
             {
-                OnFinish(result);
+                OnFinish();
             }
-            
+
             return decorated;
         }
 
         protected virtual void OnStart()
         {
-            _status = BT_EStatus.Running;
+            StartConditionals();
+
+            StartDecorators();
         }
 
         protected abstract BT_EStatus OnUpdate();
 
-        protected virtual void OnFinish(BT_EStatus status)
+        protected virtual void OnFinish()
         {
-            _status = status;
+            FinishDecorators(_status);
+
+            FinishConditionals(_status);
         }
 
         public void Abort()
         {
             if (_status == BT_EStatus.Running)
             {
-                OnFinish(BT_EStatus.Failure);
+                _status = BT_EStatus.Failure;
 
-                FinishDecorators(BT_EStatus.Failure);
-
-                FinishConditionals(BT_EStatus.Failure);
+                OnFinish();
             }
         }
 
