@@ -27,6 +27,10 @@
             }
         }
 
+        protected virtual void OnStart()
+        {
+        }
+
         public abstract bool CanExecute();
 
         public void Finish(BT_EStatus status)
@@ -37,11 +41,7 @@
                 _started = false;
             }
         }
-
-        protected virtual void OnStart()
-        {
-        }
-
+        
         protected virtual void OnFinish(BT_EStatus status)
         {
         }

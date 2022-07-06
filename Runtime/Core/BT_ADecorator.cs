@@ -27,6 +27,10 @@
             }
         }
 
+        protected virtual void OnStart()
+        {
+        }
+
         public abstract BT_EStatus Decorate(BT_EStatus status);
 
         public void Finish(BT_EStatus status)
@@ -36,10 +40,6 @@
                 OnFinish(status);
                 _started = false;
             }
-        }
-
-        protected virtual void OnStart()
-        {
         }
 
         protected virtual void OnFinish(BT_EStatus status)

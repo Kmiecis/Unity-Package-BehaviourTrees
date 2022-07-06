@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Common.BehaviourTrees
 {
@@ -9,13 +10,18 @@ namespace Common.BehaviourTrees
     public sealed class BT_RepeatForFrames : BT_ADecorator
     {
         private readonly int _duration;
+        private readonly int _deviation;
+        private readonly Random _random;
 
+        private bool _repeating;
         private int _framestamp;
 
-        public BT_RepeatForFrames(int duration) :
+        public BT_RepeatForFrames(int duration, int deviation = 0, Random random = null) :
             base("RepeatForFrames")
         {
             _duration = duration;
+            _deviation = deviation;
+            _random = random ?? new Random();
         }
 
         private int Nowstamp
@@ -33,18 +39,25 @@ namespace Common.BehaviourTrees
         {
             base.OnStart();
 
-            Remaining = _duration;
+            if (!_repeating)
+            {
+                _repeating = true;
+
+                Remaining = _duration + _random.Next(-_deviation, +_deviation);
+            }
         }
 
         public override BT_EStatus Decorate(BT_EStatus status)
         {
-            if (status == BT_EStatus.Success)
+            if (status != BT_EStatus.Running)
             {
                 if (Remaining > 0)
                 {
                     return BT_EStatus.Running;
                 }
-                return BT_EStatus.Success;
+
+                _repeating = false;
+                return status;
             }
 
             return status;

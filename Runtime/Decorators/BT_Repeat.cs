@@ -15,7 +15,6 @@ namespace Common.BehaviourTrees
             base("Repeat")
         {
             _repeats = repeats;
-            _remaining = repeats;
         }
 
         public int Remaining
@@ -27,19 +26,21 @@ namespace Common.BehaviourTrees
         {
             base.OnStart();
 
-            _remaining = _repeats;
+            if (_remaining == 0)
+                _remaining = _repeats;
+            _remaining -= 1;
         }
 
         public override BT_EStatus Decorate(BT_EStatus status)
         {
             if (status != BT_EStatus.Running)
             {
-                _remaining -= 1;
-                if (_remaining == 0)
+                if (_remaining != 0)
                 {
-                    return status;
+                    return BT_EStatus.Running;
                 }
-                return BT_EStatus.Running;
+
+                return status;
             }
 
             return status;

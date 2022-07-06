@@ -34,16 +34,16 @@ namespace Common.BehaviourTrees
             set => _timestamp = Nowstamp + value;
         }
 
-        public override bool CanExecute()
-        {
-            return Remaining > 0.0f;
-        }
-
         protected override void OnStart()
         {
             base.OnStart();
 
             Remaining = _limit + _random.NextFloat(-_deviation, +_deviation);
+        }
+
+        public override bool CanExecute()
+        {
+            return Remaining > 0.0f;
         }
 
         public override string ToString()

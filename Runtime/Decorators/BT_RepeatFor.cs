@@ -13,6 +13,7 @@ namespace Common.BehaviourTrees
         private readonly float _deviation;
         private readonly Random _random;
 
+        private bool _repeating;
         private float _timestamp;
 
         public BT_RepeatFor(float duration, float deviation = 0.0f, Random random = null) :
@@ -38,7 +39,12 @@ namespace Common.BehaviourTrees
         {
             base.OnStart();
 
-            Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
+            if (!_repeating)
+            {
+                _repeating = true;
+
+                Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
+            }
         }
 
         public override BT_EStatus Decorate(BT_EStatus status)
@@ -49,6 +55,8 @@ namespace Common.BehaviourTrees
                 {
                     return BT_EStatus.Running;
                 }
+
+                _repeating = false;
                 return status;
             }
 
