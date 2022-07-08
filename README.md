@@ -16,16 +16,16 @@ On the surface, it closely resembles UE Behaviour Trees implementation, but unde
 ```cs
 return new BT_TreeNode()
 {
-	Task = new BT_RandomNode()
-	{
-		Conditional = new BT_Cooldown(2.0f),
-		Tasks = new BT_ITask[]
-		{
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-		}
-	}
+    Task = new BT_RandomNode()
+    {
+        Conditional = new BT_Cooldown(2.0f),
+        Tasks = new BT_ITask[]
+        {
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
+        }
+    }
 };
 ```
 
@@ -41,19 +41,19 @@ return new BT_TreeNode()
 ```cs
 return new BT_TreeNode()
 {
-	Task = new BT_SequenceNode()
-	{
-		Conditional = new BT_Limit(2.5f),
-		Tasks = new BT_ITask[]
-		{
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-			new BT_Wait(1.0f),
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-			new BT_Wait(1.0f),
-			new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-			new BT_Wait(1.0f),
-		}
-	}
+    Task = new BT_SequenceNode()
+    {
+        Conditional = new BT_Limit(2.5f),
+        Tasks = new BT_ITask[]
+        {
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+            new BT_Wait(1.0f),
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+            new BT_Wait(1.0f),
+            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
+            new BT_Wait(1.0f),
+        }
+    }
 };
 ```
 
@@ -72,45 +72,45 @@ return new BT_TreeNode()
 ```cs
 return new BT_TreeNode()
 {
-	Task = new BT_SequenceNode()
-	{
-		Tasks = new BT_ITask[]
-		{
-			new BT_RandomNode()
-			{
-				Tasks = new BT_ITask[]
-				{
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-				},
-				Decorator = new BT_RepeatFor(3.0f)
-			},
-			new BT_SequenceNode()
-			{
-				Tasks = new BT_ITask[]
-				{
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-					new BT_Wait(1.0f),
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-					new BT_Wait(1.0f),
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-					new BT_Wait(1.0f),
-				},
-				Decorator = new BT_Repeat(2)
-			},
-			new BT_RandomNode()
-			{
-				Tasks = new BT_ITask[]
-				{
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-					new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-				},
-				Decorator = new BT_RepeatForFrames(120)
-			},
-		}
-	}
+    Task = new BT_SequenceNode()
+    {
+        Tasks = new BT_ITask[]
+        {
+            new BT_RandomNode()
+            {
+                Tasks = new BT_ITask[]
+                {
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
+                },
+                Decorator = new BT_RepeatFor(3.0f)
+            },
+            new BT_SequenceNode()
+            {
+                Tasks = new BT_ITask[]
+                {
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+                    new BT_Wait(1.0f),
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+                    new BT_Wait(1.0f),
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
+                    new BT_Wait(1.0f),
+                },
+                Decorator = new BT_Repeat(2)
+            },
+            new BT_RandomNode()
+            {
+                Tasks = new BT_ITask[]
+                {
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
+                },
+                Decorator = new BT_RepeatForFrames(120)
+            },
+        }
+    }
 };
 ```
 
