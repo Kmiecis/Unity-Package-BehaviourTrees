@@ -41,7 +41,7 @@ namespace Common.BehaviourTrees
             Remaining = _count + _random.Next(-_deviation, +_deviation);
         }
 
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
             if (Remaining > 0)
             {

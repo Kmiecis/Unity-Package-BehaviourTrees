@@ -202,7 +202,7 @@
                 return BT_EStatus.Failure;
             }
 
-            _status = OnUpdate();
+            _status = OnExecute();
 
             var decorated = Decorate(_status);
 
@@ -221,7 +221,7 @@
             StartDecorators();
         }
 
-        protected abstract BT_EStatus OnUpdate();
+        protected abstract BT_EStatus OnExecute();
 
         protected virtual void OnFinish()
         {

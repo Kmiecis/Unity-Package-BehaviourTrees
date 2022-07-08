@@ -23,7 +23,7 @@
             _task.Abort();
         }
 
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
             return _task.Execute();
         }

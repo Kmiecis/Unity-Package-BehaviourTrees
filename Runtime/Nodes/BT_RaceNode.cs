@@ -19,7 +19,7 @@
             _ran = false;
         }
 
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
             var status = BT_EStatus.Failure;
 

@@ -10,7 +10,7 @@
         {
         }
         
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
             for (; _current < _tasks.Length; ++_current)
             {

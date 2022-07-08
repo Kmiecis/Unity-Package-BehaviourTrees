@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     public sealed class BT_DelegateTask : BT_ATask
     {
         private Action _onStart;
-        private Func<BT_EStatus> _onUpdate;
+        private Func<BT_EStatus> _onExecute;
         private Action _onFinish;
 
         public BT_DelegateTask(string name = "Delegate") :
@@ -21,9 +21,9 @@ namespace Common.BehaviourTrees
             set => _onStart = value;
         }
 
-        public Func<BT_EStatus> OnUpdateAction
+        public Func<BT_EStatus> OnExecuteAction
         {
-            set => _onUpdate = value;
+            set => _onExecute = value;
         }
 
         public Action OnFinishAction
@@ -38,11 +38,11 @@ namespace Common.BehaviourTrees
             _onStart?.Invoke();
         }
 
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
-            if (_onUpdate != null)
+            if (_onExecute != null)
             {
-                return _onUpdate();
+                return _onExecute();
             }
             return BT_EStatus.Success;
         }

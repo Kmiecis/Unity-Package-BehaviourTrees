@@ -22,7 +22,7 @@ namespace Common.BehaviourTrees
             _current = _random.Next(0, _tasks.Length);
         }
 
-        protected override BT_EStatus OnUpdate()
+        protected override BT_EStatus OnExecute()
         {
             var current = CurrentTask;
             return current.Execute();
