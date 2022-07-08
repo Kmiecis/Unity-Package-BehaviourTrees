@@ -61,57 +61,84 @@ return new BT_TreeNode()
 </details>
 
 <details>
-<summary>Repeats</summary>
+<summary>Custom task with context and Repeats</summary>
 <p>
 
-#### Repeats example. A tree that does in sequence:
+#### Repeats example with custom contextual task. A tree does in sequence:
 #### 1. Changes _color field to a random of three options each frame for 3 seconds.
 #### 2. Changes _color field sequentially between three values each second 2 times
 #### 3. Changes _color field to a random of three options each frame for 120 frames.
 
 ```cs
-return new BT_TreeNode()
+private class ColorContext
 {
-    Task = new BT_SequenceNode()
+    public Color color;
+}
+
+private class ChangeColorTask : BT_ATask<ColorContext>
+{
+    private readonly Color _color;
+
+    public ChangeColorTask(ColorContext context, Color color) :
+        base(context)
     {
-        Tasks = new BT_ITask[]
-        {
-            new BT_RandomNode()
-            {
-                Tasks = new BT_ITask[]
-                {
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-                },
-                Decorator = new BT_RepeatFor(3.0f)
-            },
-            new BT_SequenceNode()
-            {
-                Tasks = new BT_ITask[]
-                {
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-                    new BT_Wait(1.0f),
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-                    new BT_Wait(1.0f),
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-                    new BT_Wait(1.0f),
-                },
-                Decorator = new BT_Repeat(2)
-            },
-            new BT_RandomNode()
-            {
-                Tasks = new BT_ITask[]
-                {
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-                    new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-                },
-                Decorator = new BT_RepeatForFrames(120)
-            },
-        }
+        _color = color;
     }
-};
+
+    protected override BT_EStatus OnExecute()
+    {
+        _context.color = _color;
+        return BT_EStatus.Success;
+    }
+}
+
+private ColorContext _colorContext = new ColorContext();
+
+private BT_ITask CreateBehaviourTree()
+{
+    return new BT_TreeNode()
+    {
+        Task = new BT_SequenceNode()
+        {
+            Tasks = new BT_ITask[]
+            {
+                new BT_RandomNode()
+                {
+                    Tasks = new BT_ITask[]
+                    {
+                        new ChangeColorTask(_colorContext, Color.red),
+                        new ChangeColorTask(_colorContext, Color.green),
+                        new ChangeColorTask(_colorContext, Color.blue),
+                    },
+                    Decorator = new BT_RepeatFor(3.0f)
+                },
+                new BT_SequenceNode()
+                {
+                    Tasks = new BT_ITask[]
+                    {
+                        new ChangeColorTask(_colorContext, Color.red),
+                        new BT_Wait(1.0f),
+                        new ChangeColorTask(_colorContext, Color.green),
+                        new BT_Wait(1.0f),
+                        new ChangeColorTask(_colorContext, Color.blue),
+                        new BT_Wait(1.0f),
+                    },
+                    Decorator = new BT_Repeat(2)
+                },
+                new BT_RandomNode()
+                {
+                    Tasks = new BT_ITask[]
+                    {
+                        new ChangeColorTask(_colorContext, Color.red),
+                        new ChangeColorTask(_colorContext, Color.green),
+                        new ChangeColorTask(_colorContext, Color.blue),
+                    },
+                    Decorator = new BT_RepeatForFrames(120)
+                },
+            }
+        }
+    };
+}
 ```
 
 </p>
