@@ -11,7 +11,7 @@ On the surface, it closely resembles UE Behaviour Trees implementation, but unde
 <summary>Cooldown</summary>
 <p>
 Cooldown example. A tree that changes _color field to a random of three options between cooldowns.
-```cs
+```
 return new BT_TreeNode()
 {
 	Task = new BT_RandomNode()
@@ -33,7 +33,7 @@ return new BT_TreeNode()
 <summary>Wait and Limit</summary>
 <p>
 Wait and Limit example. A tree that changes _color field sequentially between three values each second and halts midway last awaiter.
-```cs
+```
 return new BT_TreeNode()
 {
 	Task = new BT_SequenceNode()
@@ -61,7 +61,7 @@ Repeats example. A tree that does in sequence:
 1. Changes _color field to a random of three options each frame for 3 seconds.
 2. Changes _color field sequentially between three values each second 2 times
 3. Changes _color field to a random of three options each frame for 120 frames.
-```cs
+```
 return new BT_TreeNode()
 {
 	Task = new BT_SequenceNode()
