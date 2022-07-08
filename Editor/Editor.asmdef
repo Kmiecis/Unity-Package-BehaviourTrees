@@ -1,0 +1,16 @@
+{
+    "name": "CommonEditor.BehaviourTrees",
+    "rootNamespace": "CommonEditor.BehaviourTrees",
+    "references": [
+        "GUID:16a5fffba58a90e489c07e346a82285b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
