@@ -65,9 +65,9 @@ return new BT_TreeNode()
 <p>
 
 #### Repeats example with custom contextual task. A tree does in sequence:
-#### 1. Changes _color field to a random of three options each frame for 3 seconds.
-#### 2. Changes _color field sequentially between three values each second 2 times
-#### 3. Changes _color field to a random of three options each frame for 120 frames.
+1. Changes _color field to a random of three options each frame for 3 seconds.
+2. Changes _color field sequentially between three values each second 2 times
+3. Changes _color field to a random of three options each frame for 120 frames.
 
 ```cs
 private class ColorContext
