@@ -2,7 +2,7 @@
 
 ## Description
 
-Currently, this is code-only plain and simple behaviour trees implementation.
+Code-only simple and lightweight behaviour trees implementation.
 On the surface, it closely resembles UE Behaviour Trees implementation, but under the hood it was written with simplicity and extendability in mind.
 
 ## Examples
