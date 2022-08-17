@@ -5,6 +5,17 @@
 Code-only simple and lightweight behaviour trees implementation.
 On the surface, it closely resembles UE Behaviour Trees implementation, but under the hood it was written with simplicity and extendability in mind.
 
+## Installation
+
+Add the package via Package Manager by adding it from git URL:  
+`https://github.com/kmiecis/unity-package-behaviourtrees.git`  
+Package Manager can be found inside the Unity Editor in the Window tab
+
+OR
+
+Git clone this repository inside your Unity project Assets folder:  
+`git clone https://github.com/Kmiecis/Unity-Package-BehaviourTrees`
+
 ## Examples
 
 <details>
