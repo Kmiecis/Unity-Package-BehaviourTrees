@@ -13,8 +13,8 @@ Package Manager can be found inside the Unity Editor in the Window tab
 
 OR
 
-Git clone this repository inside your Unity project Assets folder:  
-`git clone https://github.com/Kmiecis/Unity-Package-BehaviourTrees`
+Git add this repository as a submodule inside your Unity project Assets folder:  
+`git submodule add https://github.com/Kmiecis/Unity-Package-BehaviourTrees`
 
 ## Examples
 
