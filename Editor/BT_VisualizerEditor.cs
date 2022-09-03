@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using Common.BehaviourTrees;
+﻿using Common.BehaviourTrees;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -274,4 +273,3 @@ namespace CommonEditor.BehaviourTrees
         }
     }
 }
-#endif
