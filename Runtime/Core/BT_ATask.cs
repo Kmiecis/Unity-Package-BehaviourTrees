@@ -63,41 +63,68 @@
             set => _services = new BT_IService[] { value };
         }
 
-        public bool TryFindTaskByName(string name, out BT_ATask task)
+        public BT_EStatus Update()
         {
-            return TryFindTaskByName(this, name, out task);
-        }
-        
-        public static bool TryFindTaskByName(BT_ATask root, string name, out BT_ATask task)
-        {
-            task = null;
+            ExecuteServices();
 
-            if (root != null)
+            if (_status != BT_EStatus.Running)
             {
-                if (root._name == name)
-                {
-                    task = root;
-                }
-                else if (root is BT_ASingleNode single)
-                {
-                    root = single.Task as BT_ATask;
-                    return TryFindTaskByName(root, name, out task);
-                }
-                else if (root is BT_AMultiNode multi)
-                {
-                    var tasks = multi.Tasks;
-                    for (int i = 0; i < tasks.Length; ++i)
-                    {
-                        root = tasks[i] as BT_ATask;
-                        if (TryFindTaskByName(root, name, out task))
-                        {
-                            return true;
-                        }
-                    }
-                }
+                Start();
             }
 
-            return task != null;
+            if (!CanExecute())
+            {
+                return BT_EStatus.Failure;
+            }
+
+            _status = OnUpdate();
+
+            var decorated = Decorate(_status);
+
+            if (_status != BT_EStatus.Running)
+            {
+                Finish();
+            }
+
+            return decorated;
+        }
+
+        private void Start()
+        {
+            OnStart();
+
+            StartConditionals();
+
+            StartDecorators();
+        }
+
+        private void Finish()
+        {
+            FinishDecorators(_status);
+
+            FinishConditionals(_status);
+
+            OnFinish();
+        }
+
+        protected virtual void OnStart()
+        {
+        }
+
+        protected abstract BT_EStatus OnUpdate();
+
+        protected virtual void OnFinish()
+        {
+        }
+
+        public void Abort()
+        {
+            if (_status == BT_EStatus.Running)
+            {
+                _status = BT_EStatus.Failure;
+
+                Finish();
+            }
         }
 
         #region CONDITIONALS
@@ -182,67 +209,97 @@
             {
                 for (int i = 0; i < _services.Length; ++i)
                 {
-                    _services[i].Execute();
+                    _services[i].Update();
                 }
             }
         }
         #endregion
 
-        public BT_EStatus Execute()
-        {
-            ExecuteServices();
-
-            if (_status != BT_EStatus.Running)
-            {
-                OnStart();
-            }
-
-            if (!CanExecute())
-            {
-                return BT_EStatus.Failure;
-            }
-
-            _status = OnExecute();
-
-            var decorated = Decorate(_status);
-
-            if (_status != BT_EStatus.Running)
-            {
-                OnFinish();
-            }
-
-            return decorated;
-        }
-
-        protected virtual void OnStart()
-        {
-            StartConditionals();
-
-            StartDecorators();
-        }
-
-        protected abstract BT_EStatus OnExecute();
-
-        protected virtual void OnFinish()
-        {
-            FinishDecorators(_status);
-
-            FinishConditionals(_status);
-        }
-
-        public void Abort()
-        {
-            if (_status == BT_EStatus.Running)
-            {
-                _status = BT_EStatus.Failure;
-
-                OnFinish();
-            }
-        }
-
         public override string ToString()
         {
             return _name;
+        }
+
+        public BT_ATask FindTaskByName(string name)
+        {
+            return FindTaskByName(this, name);
+        }
+
+        public static BT_ATask FindTaskByName(BT_ATask root, string name)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (root._name == name)
+            {
+                return root;
+            }
+
+            if (root is BT_ASingleNode single)
+            {
+                root = single.Task as BT_ATask;
+                return FindTaskByName(root, name);
+            }
+
+            if (root is BT_AMultiNode multi)
+            {
+                var tasks = multi.Tasks;
+                for (int i = 0; i < tasks.Length; ++i)
+                {
+                    root = tasks[i] as BT_ATask;
+                    var result = FindTaskByName(root, name);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public T FindTaskByType<T>()
+            where T : class, BT_ITask
+        {
+            return FindTaskByType<T>(this);
+        }
+
+        public static T FindTaskByType<T>(BT_ITask root)
+            where T : class, BT_ITask
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (root is T result)
+            {
+                return result;
+            }
+
+            if (root is BT_ASingleNode single)
+            {
+                root = single.Task;
+                return FindTaskByType<T>(root);
+            }
+
+            if (root is BT_AMultiNode multi)
+            {
+                var tasks = multi.Tasks;
+                for (int i = 0; i < tasks.Length; ++i)
+                {
+                    root = tasks[i];
+                    result = FindTaskByType<T>(root);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 

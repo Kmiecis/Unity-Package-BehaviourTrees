@@ -8,6 +8,6 @@
         /// <summary>
         /// Called every time a task is executed
         /// </summary>
-        void Execute();
+        void Update();
     }
 }

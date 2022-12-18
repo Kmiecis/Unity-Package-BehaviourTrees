@@ -37,8 +37,6 @@ namespace Common.BehaviourTrees
 
         protected override void OnStart()
         {
-            base.OnStart();
-
             if (!_repeating)
             {
                 _repeating = true;

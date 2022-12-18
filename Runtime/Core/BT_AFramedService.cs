@@ -3,7 +3,7 @@
 namespace Common.BehaviourTrees
 {
     /// <summary>
-    /// <see cref="BT_AService"/> which executes after certain amount of frames passes
+    /// <see cref="BT_AService"/> which executes every certain amount of frames
     /// </summary>
     public abstract class BT_AFramedService : BT_AService
     {
@@ -22,14 +22,14 @@ namespace Common.BehaviourTrees
             get => Time.frameCount;
         }
 
-        public override void Execute()
+        public override void Update()
         {
             var nowstamp = Nowstamp;
             if (_framestamp > nowstamp)
                 return;
 
             _framestamp = nowstamp + _delay;
-            base.Execute();
+            OnUpdate();
         }
     }
 

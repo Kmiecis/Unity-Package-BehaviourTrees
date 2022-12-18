@@ -41,8 +41,6 @@ namespace Common.BehaviourTrees
 
         protected override void OnFinish(BT_EStatus result)
         {
-            base.OnFinish(result);
-
             Remaining = _cooldown + _random.NextFloat(-_deviation, +_deviation);
         }
 

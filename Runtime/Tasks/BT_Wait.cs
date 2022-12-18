@@ -36,12 +36,10 @@ namespace Common.BehaviourTrees
         
         protected override void OnStart()
         {
-            base.OnStart();
-
             Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
         }
 
-        protected override BT_EStatus OnExecute()
+        protected override BT_EStatus OnUpdate()
         {
             if (Remaining > 0.0f)
             {

@@ -10,11 +10,11 @@
         {
         }
         
-        protected override BT_EStatus OnExecute()
+        protected override BT_EStatus OnUpdate()
         {
             for (; _current < _tasks.Length; ++_current)
             {
-                var result = _tasks[_current].Execute();
+                var result = _tasks[_current].Update();
 
                 if (result != BT_EStatus.Failure)
                 {

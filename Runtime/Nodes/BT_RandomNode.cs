@@ -17,15 +17,13 @@ namespace Common.BehaviourTrees
         
         protected override void OnStart()
         {
-            base.OnStart();
-
             _current = _random.Next(0, _tasks.Length);
         }
 
-        protected override BT_EStatus OnExecute()
+        protected override BT_EStatus OnUpdate()
         {
             var current = CurrentTask;
-            return current.Execute();
+            return current.Update();
         }
     }
 }

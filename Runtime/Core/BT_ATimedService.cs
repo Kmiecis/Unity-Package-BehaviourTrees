@@ -22,14 +22,14 @@ namespace Common.BehaviourTrees
             get => Time.time;
         }
 
-        public override void Execute()
+        public override void Update()
         {
             var nowstamp = Nowstamp;
             if (_timestamp > nowstamp)
                 return;
 
             _timestamp = nowstamp + _delay;
-            base.Execute();
+            OnUpdate();
         }
     }
 

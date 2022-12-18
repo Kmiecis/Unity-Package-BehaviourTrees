@@ -12,7 +12,7 @@
             _name = name ?? GetType().Name;
         }
 
-        public virtual void Execute()
+        public virtual void Update()
         {
             OnUpdate();
         }

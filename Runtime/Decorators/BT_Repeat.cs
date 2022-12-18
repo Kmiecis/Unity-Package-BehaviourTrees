@@ -24,8 +24,6 @@ namespace Common.BehaviourTrees
 
         protected override void OnStart()
         {
-            base.OnStart();
-
             if (_remaining == 0)
                 _remaining = _repeats;
             _remaining -= 1;

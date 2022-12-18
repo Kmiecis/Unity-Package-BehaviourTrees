@@ -21,7 +21,7 @@ namespace Common.BehaviourTrees
             set => _onStart = value;
         }
 
-        public Func<BT_EStatus> OnExecuteAction
+        public Func<BT_EStatus> OnUpdateAction
         {
             set => _onExecute = value;
         }
@@ -38,7 +38,7 @@ namespace Common.BehaviourTrees
             _onStart?.Invoke();
         }
 
-        protected override BT_EStatus OnExecute()
+        protected override BT_EStatus OnUpdate()
         {
             if (_onExecute != null)
             {

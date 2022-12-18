@@ -36,8 +36,6 @@ namespace Common.BehaviourTrees
 
         protected override void OnStart()
         {
-            base.OnStart();
-
             Remaining = _limit + _random.NextFloat(-_deviation, +_deviation);
         }
 

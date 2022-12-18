@@ -18,21 +18,19 @@
             set => _task = value;
         }
 
-        protected void AbortTask()
+        protected override BT_EStatus OnUpdate()
         {
-            _task.Abort();
-        }
-
-        protected override BT_EStatus OnExecute()
-        {
-            return _task.Execute();
+            return _task.Update();
         }
 
         protected override void OnFinish()
         {
-            base.OnFinish();
-
             AbortTask();
+        }
+
+        protected void AbortTask()
+        {
+            _task.Abort();
         }
     }
 }

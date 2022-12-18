@@ -30,6 +30,16 @@
             set => _tasks = new BT_ITask[] { value };
         }
 
+        protected override void OnStart()
+        {
+            _current = 0;
+        }
+
+        protected override void OnFinish()
+        {
+            AbortTasks();
+        }
+
         protected void AbortTasks()
         {
             if (_tasks != null)
@@ -39,20 +49,6 @@
                     _tasks[i].Abort();
                 }
             }
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-
-            _current = 0;
-        }
-
-        protected override void OnFinish()
-        {
-            base.OnFinish();
-
-            AbortTasks();
         }
     }
 }

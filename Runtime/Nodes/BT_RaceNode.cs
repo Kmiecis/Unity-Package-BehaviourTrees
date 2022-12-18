@@ -19,7 +19,7 @@
             _ran = false;
         }
 
-        protected override BT_EStatus OnExecute()
+        protected override BT_EStatus OnUpdate()
         {
             var status = BT_EStatus.Failure;
 
@@ -31,7 +31,7 @@
                     !_ran
                 )
                 {
-                    var result = current.Execute();
+                    var result = current.Update();
 
                     switch (result)
                     {

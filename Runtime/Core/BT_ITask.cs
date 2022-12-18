@@ -13,7 +13,7 @@
         /// <summary>
         /// Called every time a task is executed
         /// </summary>
-        BT_EStatus Execute();
+        BT_EStatus Update();
 
         /// <summary>
         /// Aborts a task at arbitrary point in execution flow
