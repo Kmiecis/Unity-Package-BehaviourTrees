@@ -7,15 +7,18 @@
     {
         protected BT_ITask _task;
 
+        public BT_ITask Task
+            => _task;
+
         public BT_ASingleNode(string name = null) :
             base(name)
         {
         }
 
-        public virtual BT_ITask Task
+        public BT_ASingleNode WithTask(BT_ITask task)
         {
-            get => _task;
-            set => _task = value;
+            _task = task;
+            return this;
         }
 
         protected override BT_EStatus OnUpdate()

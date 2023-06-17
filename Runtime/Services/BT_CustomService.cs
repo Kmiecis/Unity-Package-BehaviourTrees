@@ -5,23 +5,24 @@ namespace Common.BehaviourTrees
     /// <summary>
     /// <see cref="BT_AService"/> with custom delegate support
     /// </summary>
-    public class BT_DelegateService : BT_AService
+    public class BT_CustomService : BT_AService
     {
         private Action _onUpdate;
 
-        public BT_DelegateService(string name = "Delegate") :
+        public BT_CustomService(string name = "Custom") :
             base(name)
         {
         }
 
-        public Action OnUpdateAction
+        public BT_CustomService WithOnUpdate(Action value)
         {
-            set => _onUpdate = value;
+            _onUpdate = value;
+            return this;
         }
 
         protected override void OnUpdate()
         {
-            _onUpdate?.Invoke();
+            _onUpdate();
         }
     }
 }

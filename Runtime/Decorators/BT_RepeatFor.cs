@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using Random = System.Random;
 
 namespace Common.BehaviourTrees
 {
@@ -9,27 +7,27 @@ namespace Common.BehaviourTrees
     /// </summary>
     public sealed class BT_RepeatFor : BT_ADecorator
     {
-        private readonly float _duration;
-        private readonly float _deviation;
+        private readonly long _duration;
+        private readonly long _deviation;
         private readonly Random _random;
 
         private bool _repeating;
-        private float _timestamp;
+        private long _timestamp;
 
         public BT_RepeatFor(float duration, float deviation = 0.0f, Random random = null) :
             base("RepeatFor")
         {
-            _duration = duration;
-            _deviation = deviation;
+            _duration = UTime.ToTicks(duration);
+            _deviation = UTime.ToTicks(deviation);
             _random = random ?? new Random();
         }
 
-        private float Nowstamp
+        private long Nowstamp
         {
-            get => Time.time;
+            get => UTime.Now;
         }
 
-        public float Remaining
+        public long Remaining
         {
             get => _timestamp - Nowstamp;
             set => _timestamp = Nowstamp + value;
@@ -41,7 +39,7 @@ namespace Common.BehaviourTrees
             {
                 _repeating = true;
 
-                Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
+                Remaining = _duration + _random.NextLong(-_deviation, +_deviation);
             }
         }
 
@@ -49,7 +47,7 @@ namespace Common.BehaviourTrees
         {
             if (status != BT_EStatus.Running)
             {
-                if (Remaining > 0.0f)
+                if (Remaining > 0L)
                 {
                     return BT_EStatus.Running;
                 }
@@ -63,7 +61,7 @@ namespace Common.BehaviourTrees
 
         public override string ToString()
         {
-            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
+            var remaining = Math.Max(UTime.ToSeconds(Remaining), 0.0f).ToString("F1");
             return base.ToString() + " [" + remaining + ']';
         }
     }

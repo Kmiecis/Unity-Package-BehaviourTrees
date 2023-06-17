@@ -1,32 +1,32 @@
-﻿using UnityEngine;
-
-namespace Common.BehaviourTrees
+﻿namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_AService"/> which executes after certain amount of time passes
     /// </summary>
     public abstract class BT_ATimedService : BT_AService
     {
-        protected readonly float _delay;
+        protected readonly long _delay;
 
-        protected float _timestamp = 0.0f;
+        protected long _timestamp;
 
         public BT_ATimedService(float delay = 0.25f, string name = "Timed") :
             base(name)
         {
-            _delay = delay;
+            _delay = UTime.ToTicks(delay);
         }
 
-        private float Nowstamp
+        private long Nowstamp
         {
-            get => Time.time;
+            get => UTime.Now;
         }
 
         public override void Update()
         {
             var nowstamp = Nowstamp;
             if (_timestamp > nowstamp)
+            {
                 return;
+            }
 
             _timestamp = nowstamp + _delay;
             OnUpdate();

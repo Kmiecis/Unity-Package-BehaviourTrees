@@ -8,28 +8,23 @@
         protected int _current;
         protected BT_ITask[] _tasks;
 
+        public BT_ITask CurrentTask
+            => _tasks[_current];
+
+        public BT_ITask[] Tasks
+            => _tasks;
+
         public BT_AMultiNode(string name = null) :
             base(name)
         {
         }
 
-        public BT_ITask CurrentTask
+        public BT_AMultiNode WithTasks(params BT_ITask[] tasks)
         {
-            get => _tasks[_current];
+            _tasks = tasks;
+            return this;
         }
-
-        public virtual BT_ITask[] Tasks
-        {
-            get => _tasks;
-            set => _tasks = value;
-        }
-
-        public virtual BT_ITask Task
-        {
-            get => _tasks[0];
-            set => _tasks = new BT_ITask[] { value };
-        }
-
+        
         protected override void OnStart()
         {
             _current = 0;

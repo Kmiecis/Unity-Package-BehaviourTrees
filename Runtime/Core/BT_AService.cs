@@ -5,7 +5,10 @@
     /// </summary>
     public abstract class BT_AService : BT_IService
     {
-        protected string _name;
+        protected readonly string _name;
+
+        public string Name
+            => _name;
 
         public BT_AService(string name = null)
         {

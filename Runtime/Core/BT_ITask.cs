@@ -6,12 +6,12 @@
     public interface BT_ITask
     {
         /// <summary>
-        /// Returns last execution result
+        /// Returns last update result
         /// </summary>
         BT_EStatus Status { get; }
 
         /// <summary>
-        /// Called every time a task is executed
+        /// Called every time a task is updated
         /// </summary>
         BT_EStatus Update();
 

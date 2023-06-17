@@ -5,17 +5,15 @@
     /// </summary>
     public abstract class BT_AConditional : BT_IConditional
     {
-        protected string _name;
+        protected readonly string _name;
         protected bool _started;
+
+        public string Name
+            => _name;
 
         public BT_AConditional(string name = null)
         {
             _name = name ?? GetType().Name;
-        }
-
-        public string Name
-        {
-            get => _name;
         }
 
         public void Start()

@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using Random = System.Random;
 
 namespace Common.BehaviourTrees
 {
@@ -9,26 +7,26 @@ namespace Common.BehaviourTrees
     /// </summary>
     public sealed class BT_Limit : BT_AConditional
     {
-        private readonly float _limit;
-        private readonly float _deviation;
+        private readonly long _limit;
+        private readonly long _deviation;
         private readonly Random _random;
 
-        private float _timestamp = 0.0f;
+        private long _timestamp;
 
         public BT_Limit(float limit, float deviation = 0.0f, Random random = null) :
             base("Limit")
         {
-            _limit = limit;
-            _deviation = deviation;
+            _limit = UTime.ToTicks(limit);
+            _deviation = UTime.ToTicks(deviation);
             _random = random ?? new Random();
         }
 
-        private float Nowstamp
+        private long Nowstamp
         {
-            get => Time.time;
+            get => UTime.Now;
         }
 
-        public float Remaining
+        public long Remaining
         {
             get => _timestamp - Nowstamp;
             set => _timestamp = Nowstamp + value;
@@ -36,17 +34,17 @@ namespace Common.BehaviourTrees
 
         protected override void OnStart()
         {
-            Remaining = _limit + _random.NextFloat(-_deviation, +_deviation);
+            Remaining = _limit + _random.NextLong(-_deviation, +_deviation);
         }
 
         public override bool CanExecute()
         {
-            return Remaining > 0.0f;
+            return Remaining > 0L;
         }
 
         public override string ToString()
         {
-            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
+            var remaining = Math.Max(UTime.ToSeconds(Remaining), 0.0f).ToString("F1");
             return base.ToString() + " [" + remaining + ']';
         }
     }

@@ -5,62 +5,49 @@
     /// </summary>
     public abstract class BT_ATask : BT_ITask
     {
-        protected string _name;
+        protected readonly string _name;
         protected BT_EStatus _status;
 
         protected BT_IConditional[] _conditionals;
         protected BT_IDecorator[] _decorators;
         protected BT_IService[] _services;
 
+        public string Name
+            => _name;
+
+        public BT_EStatus Status
+            => _status;
+
+        public BT_IConditional[] Conditionals
+            => _conditionals;
+
+        public BT_IDecorator[] Decorators
+            => _decorators;
+
+        public BT_IService[] Services
+            => _services;
+
         public BT_ATask(string name = null)
         {
             _name = name ?? GetType().Name;
         }
 
-        public string Name
+        public BT_ATask WithConditionals(params BT_IConditional[] values)
         {
-            get => _name;
+            _conditionals = values;
+            return this;
         }
 
-        public BT_EStatus Status
+        public BT_ATask WithDecorators(params BT_IDecorator[] values)
         {
-            get => _status;
+            _decorators = values;
+            return this;
         }
 
-        public BT_IConditional[] Conditionals
+        public BT_ATask WithServices(params BT_IService[] values)
         {
-            get => _conditionals;
-            set => _conditionals = value;
-        }
-
-        public BT_IConditional Conditional
-        {
-            get => _conditionals[0];
-            set => _conditionals = new BT_IConditional[] { value };
-        }
-
-        public BT_IDecorator[] Decorators
-        {
-            get => _decorators;
-            set => _decorators = value;
-        }
-
-        public BT_IDecorator Decorator
-        {
-            get => _decorators[0];
-            set => _decorators = new BT_IDecorator[] { value };
-        }
-
-        public BT_IService[] Services
-        {
-            get => _services;
-            set => _services = value;
-        }
-
-        public BT_IService Service
-        {
-            get => _services[0];
-            set => _services = new BT_IService[] { value };
+            _services = values;
+            return this;
         }
 
         public BT_EStatus Update()
