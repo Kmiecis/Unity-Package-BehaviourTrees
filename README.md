@@ -26,18 +26,14 @@ Git add this repository as a submodule inside your Unity project Assets folder:
 
 ```cs
 return new BT_TreeNode()
-{
-    Task = new BT_RandomNode()
-    {
-        Conditional = new BT_Cooldown(2.0f),
-        Tasks = new BT_ITask[]
-        {
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-        }
-    }
-};
+    .WithTask(new BT_RandomNode()
+        .WithTasks(
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.red; }),
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.green; }),
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.blue; })
+        )
+        .WithConditionals(new BT_Cooldown(2.0f))
+    );
 ```
 
 </p>
@@ -51,21 +47,17 @@ return new BT_TreeNode()
 
 ```cs
 return new BT_TreeNode()
-{
-    Task = new BT_SequenceNode()
-    {
-        Conditional = new BT_Limit(2.5f),
-        Tasks = new BT_ITask[]
-        {
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.red; } },
+    .WithTask(new BT_SequenceNode()
+        .WithTasks(
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.red; }),
             new BT_Wait(1.0f),
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.green; } },
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.green; }),
             new BT_Wait(1.0f),
-            new BT_DelegateTask() { OnStartAction = delegate { _color = Color.blue; } },
-            new BT_Wait(1.0f),
-        }
-    }
-};
+            new BT_CustomTask().WithOnStart(delegate { _color = Color.blue; }),
+            new BT_Wait(1.0f)
+        )
+        .WithConditionals(new BT_Limit(2.5f))
+    );
 ```
 
 </p>
@@ -77,8 +69,7 @@ return new BT_TreeNode()
 
 #### Repeats example with custom contextual task. A tree does in sequence:
 1. Changes _color field to a random of three options each frame for 3 seconds.
-2. Changes _color field sequentially between three values each second 2 times
-3. Changes _color field to a random of three options each frame for 120 frames.
+2. Changes _color field sequentially between three values each second 2 times.
 
 ```cs
 private class ColorContext
@@ -108,47 +99,27 @@ private ColorContext _colorContext = new ColorContext();
 private BT_ITask CreateBehaviourTree()
 {
     return new BT_TreeNode()
-    {
-        Task = new BT_SequenceNode()
-        {
-            Tasks = new BT_ITask[]
-            {
+        .WithTask(new BT_SequenceNode()
+            .WithTasks(
                 new BT_RandomNode()
-                {
-                    Tasks = new BT_ITask[]
-                    {
+                    .WithTasks(
                         new ChangeColorTask(_colorContext, Color.red),
                         new ChangeColorTask(_colorContext, Color.green),
-                        new ChangeColorTask(_colorContext, Color.blue),
-                    },
-                    Decorator = new BT_RepeatFor(3.0f)
-                },
+                        new ChangeColorTask(_colorContext, Color.blue)
+                    )
+                    .WithDecorators(new BT_RepeatFor(3.0f)),
                 new BT_SequenceNode()
-                {
-                    Tasks = new BT_ITask[]
-                    {
+                    .WithTasks(
                         new ChangeColorTask(_colorContext, Color.red),
                         new BT_Wait(1.0f),
                         new ChangeColorTask(_colorContext, Color.green),
                         new BT_Wait(1.0f),
                         new ChangeColorTask(_colorContext, Color.blue),
-                        new BT_Wait(1.0f),
-                    },
-                    Decorator = new BT_Repeat(2)
-                },
-                new BT_RandomNode()
-                {
-                    Tasks = new BT_ITask[]
-                    {
-                        new ChangeColorTask(_colorContext, Color.red),
-                        new ChangeColorTask(_colorContext, Color.green),
-                        new ChangeColorTask(_colorContext, Color.blue),
-                    },
-                    Decorator = new BT_RepeatForFrames(120)
-                },
-            }
-        }
-    };
+                        new BT_Wait(1.0f)
+                    )
+                    .WithDecorators(new BT_Repeat(2))
+            )
+        );
 }
 ```
 
