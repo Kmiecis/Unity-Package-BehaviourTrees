@@ -3,9 +3,9 @@
 namespace Common.BehaviourTrees
 {
     /// <summary>
-    /// <see cref="BT_AMultiNode"/> which executes a random child task as long as it is running
+    /// <see cref="BT_ANode"/> which executes a random child task as long as it is running
     /// </summary>
-    public sealed class BT_RandomNode : BT_AMultiNode
+    public sealed class BT_RandomNode : BT_ANode
     {
         private readonly Random _random;
 
@@ -22,7 +22,7 @@ namespace Common.BehaviourTrees
 
         protected override BT_EStatus OnUpdate()
         {
-            var current = CurrentTask;
+            var current = Current;
             return current.Update();
         }
     }

@@ -207,86 +207,15 @@
             return _name;
         }
 
-        public BT_ATask FindTaskByName(string name)
+        public BT_ITask FindTaskByName(string name)
         {
-            return FindTaskByName(this, name);
-        }
-
-        public static BT_ATask FindTaskByName(BT_ATask root, string name)
-        {
-            if (root == null)
-            {
-                return null;
-            }
-
-            if (root._name == name)
-            {
-                return root;
-            }
-
-            if (root is BT_ASingleNode single)
-            {
-                root = single.Task as BT_ATask;
-                return FindTaskByName(root, name);
-            }
-
-            if (root is BT_AMultiNode multi)
-            {
-                var tasks = multi.Tasks;
-                for (int i = 0; i < tasks.Length; ++i)
-                {
-                    root = tasks[i] as BT_ATask;
-                    var result = FindTaskByName(root, name);
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
+            return FindTaskByName(name);
         }
 
         public T FindTaskByType<T>()
             where T : class, BT_ITask
         {
-            return FindTaskByType<T>(this);
-        }
-
-        public static T FindTaskByType<T>(BT_ITask root)
-            where T : class, BT_ITask
-        {
-            if (root == null)
-            {
-                return null;
-            }
-
-            if (root is T result)
-            {
-                return result;
-            }
-
-            if (root is BT_ASingleNode single)
-            {
-                root = single.Task;
-                return FindTaskByType<T>(root);
-            }
-
-            if (root is BT_AMultiNode multi)
-            {
-                var tasks = multi.Tasks;
-                for (int i = 0; i < tasks.Length; ++i)
-                {
-                    root = tasks[i];
-                    result = FindTaskByType<T>(root);
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
+            return FindTaskByType<T>();
         }
     }
 

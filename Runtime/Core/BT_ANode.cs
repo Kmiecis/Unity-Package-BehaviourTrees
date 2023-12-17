@@ -3,23 +3,29 @@
     /// <summary>
     /// <see cref="BT_ATask"/> node with a multiple child tasks support
     /// </summary>
-    public abstract class BT_AMultiNode : BT_ATask
+    public abstract class BT_ANode : BT_ATask, BT_INode
     {
-        protected int _current;
         protected BT_ITask[] _tasks;
-
-        public BT_ITask CurrentTask
-            => _tasks[_current];
+        protected int _current;
 
         public BT_ITask[] Tasks
             => _tasks;
 
-        public BT_AMultiNode(string name = null) :
+        public BT_ITask Current
+            => _tasks[_current];
+
+        public BT_ANode(string name = null) :
             base(name)
         {
         }
 
-        public BT_AMultiNode WithTasks(params BT_ITask[] tasks)
+        public BT_ANode WithTask(BT_ITask task)
+        {
+            _tasks = new BT_ITask[] { task };
+            return this;
+        }
+
+        public BT_ANode WithTasks(params BT_ITask[] tasks)
         {
             _tasks = tasks;
             return this;

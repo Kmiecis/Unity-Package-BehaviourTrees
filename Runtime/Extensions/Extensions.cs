@@ -5,23 +5,6 @@ namespace Common.BehaviourTrees
 {
     public static class Extensions
     {
-        #region Random
-        public static float NextFloat(this Random self)
-        {
-            return (float)self.NextDouble();
-        }
-
-        public static float NextFloat(this Random self, float max)
-        {
-            return self.NextFloat() * max;
-        }
-
-        public static float NextFloat(this Random self, float min, float max)
-        {
-            return min + self.NextFloat() * (max - min);
-        }
-        #endregion
-
         #region Array
         public static bool IsNullOrEmpty<T>(this T[] self)
         {
@@ -37,10 +20,28 @@ namespace Common.BehaviourTrees
         #region Dictionary
         public static TValue GetOrCompute<TKey, TValue>(this Dictionary<TKey, TValue> self, TKey key, Func<TValue> computor)
         {
-            TValue result;
-            if (!self.TryGetValue(key, out result))
+            if (!self.TryGetValue(key, out var result))
+            {
                 self[key] = result = computor();
+            }
             return result;
+        }
+        #endregion
+
+        #region Random
+        public static float NextFloat(this Random self)
+        {
+            return (float)self.NextDouble();
+        }
+
+        public static float NextFloat(this Random self, float max)
+        {
+            return self.NextFloat() * max;
+        }
+
+        public static float NextFloat(this Random self, float min, float max)
+        {
+            return min + self.NextFloat() * (max - min);
         }
         #endregion
 

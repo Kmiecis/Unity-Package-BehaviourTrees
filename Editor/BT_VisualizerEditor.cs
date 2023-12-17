@@ -75,28 +75,14 @@ namespace CommonEditor.BehaviourTrees
             {
                 AddLabelField(itask, indent, line);
             }
-            else if (itask is BT_ASingleNode single)
+            else if (itask is BT_ANode node)
             {
-                TryAddConditionalsField(single, indent, ref line);
-                var foldout = AddFoldoutField(single, indent, line++);
-                TryAddDecoratorsField(single, indent, ref line);
+                TryAddConditionalsField(node, indent, ref line);
+                var foldout = AddFoldoutField(node, indent, line++);
+                TryAddDecoratorsField(node, indent, ref line);
                 if (foldout)
                 {
-                    var task = single.Task;
-                    if (task != null)
-                    {
-                        AddTask(task, indent + 1, line);
-                    }
-                }
-            }
-            else if (itask is BT_AMultiNode multi)
-            {
-                TryAddConditionalsField(multi, indent, ref line);
-                var foldout = AddFoldoutField(multi, indent, line++);
-                TryAddDecoratorsField(multi, indent, ref line);
-                if (foldout)
-                {
-                    var tasks = multi.Tasks;
+                    var tasks = node.Tasks;
                     if (tasks != null)
                     {
                         for (int i = 0; i < tasks.Length; ++i)

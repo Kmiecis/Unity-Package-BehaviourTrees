@@ -1,9 +1,9 @@
 ﻿namespace Common.BehaviourTrees
 {
     /// <summary>
-    /// <see cref="BT_AMultiNode"/> which executes its child tasks in sequence until one fail or all succeed
+    /// <see cref="BT_ANode"/> which executes its child tasks in sequence until one fail or all succeed
     /// </summary>
-    public sealed class BT_SequenceNode : BT_AMultiNode
+    public sealed class BT_SequenceNode : BT_ANode
     {
         public BT_SequenceNode(string name = "") :
             base(name)

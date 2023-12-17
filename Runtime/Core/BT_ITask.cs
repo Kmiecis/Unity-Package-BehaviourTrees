@@ -6,6 +6,11 @@
     public interface BT_ITask
     {
         /// <summary>
+        /// Returns a task name
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Returns last update result
         /// </summary>
         BT_EStatus Status { get; }
