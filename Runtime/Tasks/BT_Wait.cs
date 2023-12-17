@@ -7,39 +7,34 @@ namespace Common.BehaviourTrees
     /// </summary>
     public sealed class BT_Wait : BT_ATask
     {
-        private readonly long _duration;
-        private readonly long _deviation;
+        private readonly float _duration;
+        private readonly float _deviation;
         private readonly Random _random;
 
-        private long _timestamp;
+        private float _timestamp;
 
         public BT_Wait(float duration, float deviation = 0.0f, Random random = null) :
             base("Wait")
         {
-            _duration = UTime.ToTicks(duration);
-            _deviation = UTime.ToTicks(deviation);
+            _duration = duration;
+            _deviation = deviation;
             _random = random ?? new Random();
         }
 
-        private long Nowstamp
+        public float Remaining
         {
-            get => UTime.Now;
-        }
-
-        public long Remaining
-        {
-            get => _timestamp - Nowstamp;
-            set => _timestamp = Nowstamp + value;
+            get => _timestamp - UTime.UtcNow;
+            set => _timestamp = UTime.UtcNow + value;
         }
         
         protected override void OnStart()
         {
-            Remaining = _duration + _random.NextLong(-_deviation, +_deviation);
+            Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
         }
 
         protected override BT_EStatus OnUpdate()
         {
-            if (Remaining > 0L)
+            if (Remaining > 0.0f)
             {
                 return BT_EStatus.Running;
             }
@@ -48,7 +43,7 @@ namespace Common.BehaviourTrees
 
         public override string ToString()
         {
-            var remaining = Math.Max(UTime.ToSeconds(Remaining), 0.0f).ToString("F1");
+            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
             return base.ToString() + " [" + remaining + ']';
         }
     }

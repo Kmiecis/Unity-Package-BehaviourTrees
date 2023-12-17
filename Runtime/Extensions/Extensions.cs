@@ -6,28 +6,19 @@ namespace Common.BehaviourTrees
     public static class Extensions
     {
         #region Random
-        public static long NextLong(this Random self, long min, long max)
+        public static float NextFloat(this Random self)
         {
-            ulong range = (ulong)(max - min);
-            var bytes = new byte[8];
-            ulong rand;
-            do
-            {
-                self.NextBytes(bytes);
-                rand = (ulong)BitConverter.ToInt64(bytes, 0);
-            }
-            while (rand > ulong.MaxValue - ((ulong.MaxValue % range) + 1) % range);
-            return (long)(rand % range) + min;
+            return (float)self.NextDouble();
         }
 
-        public static long NextLong(this Random self, long max)
+        public static float NextFloat(this Random self, float max)
         {
-            return self.NextLong(long.MinValue, max);
+            return self.NextFloat() * max;
         }
 
-        public static long NextLong(this Random self)
+        public static float NextFloat(this Random self, float min, float max)
         {
-            return self.NextLong(long.MaxValue);
+            return min + self.NextFloat() * (max - min);
         }
         #endregion
 
