@@ -1,4 +1,4 @@
-# Common Behaviour Trees
+# Behaviour Trees
 
 ## Description
 
@@ -8,7 +8,7 @@ On the surface, it closely resembles UE Behaviour Trees implementation, but unde
 ## Installation
 
 Add the package via Package Manager by adding it from git URL:  
-`https://github.com/kmiecis/unity-package-behaviourtrees.git`  
+`https://github.com/Kmiecis/Unity-Package-BehaviourTrees.git`  
 Package Manager can be found inside the Unity Editor in the Window tab
 
 OR
