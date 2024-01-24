@@ -7,7 +7,7 @@
     {
         private bool _ran;
 
-        public BT_ParallelNode(string name = "") :
+        public BT_ParallelNode(string name = "Parallel") :
             base(name)
         {
         }

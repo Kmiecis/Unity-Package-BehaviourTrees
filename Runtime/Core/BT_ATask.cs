@@ -206,17 +206,6 @@
         {
             return _name;
         }
-
-        public BT_ITask FindTaskByName(string name)
-        {
-            return FindTaskByName(name);
-        }
-
-        public T FindTaskByType<T>()
-            where T : class, BT_ITask
-        {
-            return FindTaskByType<T>();
-        }
     }
 
     /// <summary>

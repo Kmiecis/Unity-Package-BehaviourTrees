@@ -7,7 +7,7 @@
     {
         private bool _ran;
 
-        public BT_RaceNode(string name = "") :
+        public BT_RaceNode(string name = "Race") :
             base(name)
         {
         }

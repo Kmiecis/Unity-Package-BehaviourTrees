@@ -1,6 +1,6 @@
 namespace Common.BehaviourTrees
 {
-    internal static class BT_ITaskExtensions
+    public static class BT_ITaskExtensions
     {
         public static BT_ITask FindTaskByName(this BT_ITask self, string name)
         {

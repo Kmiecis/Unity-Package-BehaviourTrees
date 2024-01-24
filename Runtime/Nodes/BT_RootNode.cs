@@ -3,9 +3,9 @@
     /// <summary>
     /// <see cref="BT_ANode"/> serving as a root of the tree
     /// </summary>
-    public sealed class BT_TreeNode : BT_ANode
+    public sealed class BT_RootNode : BT_ANode
     {
-        public BT_TreeNode(string name = "Root") :
+        public BT_RootNode(string name = "Root") :
             base(name)
         {
         }
