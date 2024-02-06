@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Common.BehaviourTrees
 {
     /// <summary>
@@ -6,13 +8,10 @@ namespace Common.BehaviourTrees
     public interface BT_INode : BT_ITask
     {
         /// <summary>
-        /// Returns all node tasks
+        /// Returns all node children
         /// </summary>
-        BT_ITask[] Tasks { get; }
+        IEnumerable<BT_ITask> GetChildren();
 
-        /// <summary>
-        /// Returns current node task
-        /// </summary>
         BT_ITask Current { get; }
     }
 }

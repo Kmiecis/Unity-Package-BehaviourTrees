@@ -1,16 +1,25 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// Base <see cref="BT_ITask"/> implementation
     /// </summary>
+    [Serializable]
     public abstract class BT_ATask : BT_ITask
     {
-        protected readonly string _name;
-        protected BT_EStatus _status;
+        [HideInInspector] [SerializeField] protected string _name;
 
-        protected BT_IConditional[] _conditionals;
-        protected BT_IDecorator[] _decorators;
-        protected BT_IService[] _services;
+        [Tooltip("Conditionals affect the task execution availability.\nA task will only be executed once all conditions pass.")]
+        [SerializeReference] protected List<BT_IConditional> _conditionals;
+        [Tooltip("Decorators alter the task result status.\nA task will have its status ran through all decorators.")]
+        [SerializeReference] protected List<BT_IDecorator> _decorators;
+        [Tooltip("Services run along with the task.\nA task will not be affected directly by any of the services.")]
+        [SerializeReference] protected List<BT_IService> _services;
+
+        protected BT_EStatus _status;
 
         public string Name
             => _name;
@@ -18,36 +27,13 @@
         public BT_EStatus Status
             => _status;
 
-        public BT_IConditional[] Conditionals
-            => _conditionals;
-
-        public BT_IDecorator[] Decorators
-            => _decorators;
-
-        public BT_IService[] Services
-            => _services;
-
         public BT_ATask(string name = null)
         {
             _name = name ?? GetType().Name;
-        }
 
-        public BT_ATask WithConditionals(params BT_IConditional[] values)
-        {
-            _conditionals = values;
-            return this;
-        }
-
-        public BT_ATask WithDecorators(params BT_IDecorator[] values)
-        {
-            _decorators = values;
-            return this;
-        }
-
-        public BT_ATask WithServices(params BT_IService[] values)
-        {
-            _services = values;
-            return this;
+            _conditionals = new List<BT_IConditional>();
+            _decorators = new List<BT_IDecorator>();
+            _services = new List<BT_IService>();
         }
 
         public BT_EStatus Update()
@@ -114,28 +100,22 @@
             }
         }
 
-        #region CONDITIONALS
+        #region Conditionals
         protected void StartConditionals()
         {
-            if (_conditionals != null)
+            foreach (var conditional in _conditionals)
             {
-                for (int i = 0; i < _conditionals.Length; ++i)
-                {
-                    _conditionals[i].Start();
-                }
+                conditional.Start();
             }
         }
 
         protected bool CanExecute()
         {
-            if (_conditionals != null)
+            foreach (var conditional in _conditionals)
             {
-                for (int i = 0; i < _conditionals.Length; ++i)
+                if (!conditional.CanExecute())
                 {
-                    if (!_conditionals[i].CanExecute())
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             return true;
@@ -143,61 +123,46 @@
 
         protected void FinishConditionals(BT_EStatus status)
         {
-            if (_conditionals != null)
+            foreach (var conditional in _conditionals)
             {
-                for (int i = 0; i < _conditionals.Length; ++i)
-                {
-                    _conditionals[i].Finish(status);
-                }
+                conditional.Finish(status);
             }
         }
         #endregion
 
-        #region DECORATORS
+        #region Decorators
         protected void StartDecorators()
         {
-            if (_decorators != null)
+            foreach (var decorator in _decorators)
             {
-                for (int i = 0; i < _decorators.Length; ++i)
-                {
-                    _decorators[i].Start();
-                }
+                decorator.Start();
             }
         }
 
         protected BT_EStatus Decorate(BT_EStatus status)
         {
-            if (_decorators != null)
+            foreach (var decorator in _decorators)
             {
-                for (int i = 0; i < _decorators.Length; ++i)
-                {
-                    status = _decorators[i].Decorate(status);
-                }
+                status = decorator.Decorate(status);
             }
             return status;
         }
 
         protected void FinishDecorators(BT_EStatus status)
         {
-            if (_decorators != null)
+            foreach (var decorator in _decorators)
             {
-                for (int i = 0; i < _decorators.Length; ++i)
-                {
-                    _decorators[i].Finish(status);
-                }
+                decorator.Finish(status);
             }
         }
         #endregion
 
-        #region SERVICES
+        #region Services
         protected void ExecuteServices()
         {
-            if (_services != null)
+            foreach (var service in _services)
             {
-                for (int i = 0; i < _services.Length; ++i)
-                {
-                    _services[i].Update();
-                }
+                service.Update();
             }
         }
         #endregion
@@ -205,20 +170,6 @@
         public override string ToString()
         {
             return _name;
-        }
-    }
-
-    /// <summary>
-    /// <see cref="BT_ATask"/> implementation with build-in context <see cref="T"/> support of any type
-    /// </summary>
-    public abstract class BT_ATask<T> : BT_ATask
-    {
-        protected readonly T _context;
-
-        public BT_ATask(T context, string name = null) :
-            base(name)
-        {
-            _context = context;
         }
     }
 }

@@ -1,31 +1,34 @@
 ﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ADecorator"/> which repeats a task for a certain amount of time
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Repeat For", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_RepeatFor : BT_ADecorator
     {
-        private readonly float _duration;
-        private readonly float _deviation;
-        private readonly Random _random;
+        [SerializeField] private float _duration;
+        [SerializeField] private float _deviation;
+
+        [SerializeField] [ReadOnly] private float _remaining;
 
         private bool _repeating;
         private float _timestamp;
 
-        public BT_RepeatFor(float duration, float deviation = 0.0f, Random random = null) :
-            base("RepeatFor")
+        public BT_RepeatFor() :
+            this(0.0f, 0.0f)
+        {
+        }
+
+        public BT_RepeatFor(float duration, float deviation = 0.0f) :
+            base("Repeat For")
         {
             _duration = duration;
             _deviation = deviation;
-            _random = random ?? new Random();
-        }
-
-        public float Remaining
-        {
-            get => _timestamp - UTime.UtcNow;
-            set => _timestamp = UTime.UtcNow + value;
         }
 
         protected override void OnStart()
@@ -34,7 +37,8 @@ namespace Common.BehaviourTrees
             {
                 _repeating = true;
 
-                Remaining = _duration + _random.NextFloat(-_deviation, +_deviation);
+                _remaining = _duration + Random.Range(-_deviation, +_deviation);
+                _timestamp = BT_Time.Nowstamp;
             }
         }
 
@@ -42,7 +46,8 @@ namespace Common.BehaviourTrees
         {
             if (status != BT_EStatus.Running)
             {
-                if (Remaining > 0.0f)
+                _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+                if (_remaining > 0.0f)
                 {
                     return BT_EStatus.Running;
                 }
@@ -52,12 +57,6 @@ namespace Common.BehaviourTrees
             }
 
             return status;
-        }
-
-        public override string ToString()
-        {
-            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
-            return base.ToString() + " [" + remaining + ']';
         }
     }
 }

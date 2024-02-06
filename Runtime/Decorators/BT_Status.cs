@@ -1,14 +1,24 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+using UnityEngine;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ADecorator"/> which overrides a task execution result
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Status", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Status : BT_ADecorator
     {
-        private readonly BT_EStatus _status;
+        [SerializeField] private BT_EStatus _status;
+
+        public BT_Status() :
+            this(BT_EStatus.Running)
+        {
+        }
 
         public BT_Status(BT_EStatus status) :
-            base(status.ToString())
+            base("Status")
         {
             _status = status;
         }

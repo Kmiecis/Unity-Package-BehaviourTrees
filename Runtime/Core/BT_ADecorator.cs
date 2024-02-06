@@ -1,11 +1,16 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+using UnityEngine;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// Base <see cref="BT_IDecorator"/> implementation
     /// </summary>
+    [Serializable]
     public abstract class BT_ADecorator : BT_IDecorator
     {
-        protected readonly string _name;
+        [HideInInspector] [SerializeField] protected string _name;
+
         protected bool _started;
 
         public string Name
@@ -47,20 +52,6 @@
         public override string ToString()
         {
             return _name;
-        }
-    }
-
-    /// <summary>
-    /// <see cref="BT_ADecorator"/> implementation with build-in context <see cref="T"/> support of any type
-    /// </summary>
-    public abstract class BT_ADecorator<T> : BT_ADecorator
-    {
-        protected readonly T _context;
-
-        public BT_ADecorator(T context, string name = null) :
-            base(name)
-        {
-            _context = context;
         }
     }
 }

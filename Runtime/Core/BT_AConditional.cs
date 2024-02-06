@@ -1,11 +1,16 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+using UnityEngine;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// Base <see cref="BT_IConditional"/> implementation
     /// </summary>
+    [Serializable]
     public abstract class BT_AConditional : BT_IConditional
     {
-        protected readonly string _name;
+        [HideInInspector] [SerializeField] protected string _name;
+        
         protected bool _started;
 
         public string Name
@@ -47,20 +52,6 @@
         public override string ToString()
         {
             return _name;
-        }
-    }
-
-    /// <summary>
-    /// <see cref="BT_AConditional"/> implementation with build-in context <see cref="T"/> support of any type
-    /// </summary>
-    public abstract class BT_AConditional<T> : BT_AConditional
-    {
-        protected readonly T _context;
-
-        public BT_AConditional(T context, string name = null) :
-            base(name)
-        {
-            _context = context;
         }
     }
 }

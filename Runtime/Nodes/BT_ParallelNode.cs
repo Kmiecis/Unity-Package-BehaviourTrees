@@ -1,14 +1,18 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ANode"/> which executes its child tasks in parallel until one fail or all succeed
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Parallel", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_ParallelNode : BT_ANode
     {
         private bool _ran;
 
-        public BT_ParallelNode(string name = "Parallel") :
-            base(name)
+        public BT_ParallelNode() :
+            base("Parallel")
         {
         }
         
@@ -23,9 +27,9 @@
         {
             var status = BT_EStatus.Success;
 
-            for (int i = _current; i < _tasks.Length; ++i)
+            for (int i = _current; i < _children.Count; ++i)
             {
-                var current = _tasks[i];
+                var current = _children[i];
                 if (
                     current.Status == BT_EStatus.Running ||
                     !_ran

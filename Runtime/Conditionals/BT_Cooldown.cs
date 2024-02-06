@@ -1,46 +1,49 @@
 ﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_AConditional"/> which prevents a task execution until a certain amount of time passes
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Cooldown", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Cooldown : BT_AConditional
     {
-        private readonly float _cooldown;
-        private readonly float _deviation;
-        private readonly Random _random;
+        [SerializeField] private float _cooldown;
+        [SerializeField] private float _deviation;
+
+        [SerializeField] [ReadOnly] private float _remaining;
 
         private float _timestamp;
 
-        public BT_Cooldown(float cooldown, float deviation = 0.0f, Random random = null) :
+        public BT_Cooldown() :
+            this(0.0f, 0.0f)
+        {
+        }
+
+        public BT_Cooldown(float cooldown, float deviation = 0.0f) :
             base("Cooldown")
         {
             _cooldown = cooldown;
             _deviation = deviation;
-            _random = random ?? new Random();
         }
 
-        public float Remaining
+        protected override void OnStart()
         {
-            get => _timestamp - UTime.UtcNow;
-            set => _timestamp = UTime.UtcNow + value;
+            _timestamp = BT_Time.Nowstamp;
         }
 
         public override bool CanExecute()
         {
-            return Remaining <= 0.0f;
+            _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+            return _remaining <= 0.0f;
         }
 
         protected override void OnFinish(BT_EStatus result)
         {
-            Remaining = _cooldown + _random.NextFloat(-_deviation, +_deviation);
-        }
-
-        public override string ToString()
-        {
-            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
-            return base.ToString() + " [" + remaining + ']';
+            _remaining = _cooldown + Random.Range(-_deviation, +_deviation);
         }
     }
 }

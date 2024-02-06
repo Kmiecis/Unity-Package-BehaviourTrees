@@ -1,36 +1,34 @@
-﻿namespace Common.BehaviourTrees
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ATask"/> node with a multiple child tasks support
     /// </summary>
+    [Serializable]
     public abstract class BT_ANode : BT_ATask, BT_INode
     {
-        protected BT_ITask[] _tasks;
+        [Tooltip("Children of this node.\nA child is executed in order determined by the node.")]
+        [SerializeReference] protected List<BT_ITask> _children;
+
         protected int _current;
 
-        public BT_ITask[] Tasks
-            => _tasks;
-
         public BT_ITask Current
-            => _tasks[_current];
+            => _children[_current];
 
         public BT_ANode(string name = null) :
             base(name)
         {
+            _children = new List<BT_ITask>();
         }
 
-        public BT_ANode WithTask(BT_ITask task)
+        public IEnumerable<BT_ITask> GetChildren()
         {
-            _tasks = new BT_ITask[] { task };
-            return this;
+            return _children;
         }
 
-        public BT_ANode WithTasks(params BT_ITask[] tasks)
-        {
-            _tasks = tasks;
-            return this;
-        }
-        
         protected override void OnStart()
         {
             _current = 0;
@@ -38,17 +36,14 @@
 
         protected override void OnFinish()
         {
-            AbortTasks();
+            AbortChildren();
         }
 
-        protected void AbortTasks()
+        protected void AbortChildren()
         {
-            if (_tasks != null)
+            foreach (var child in _children)
             {
-                for (int i = 0; i < _tasks.Length; ++i)
-                {
-                    _tasks[i].Abort();
-                }
+                child.Abort();
             }
         }
     }

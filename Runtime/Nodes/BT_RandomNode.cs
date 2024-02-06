@@ -1,29 +1,34 @@
 ﻿using System;
+using Random = UnityEngine.Random;
 
 namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ANode"/> which executes a random child task as long as it is running
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Random", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_RandomNode : BT_ANode
     {
-        private readonly Random _random;
-
-        public BT_RandomNode(string name = "", Random random = null) :
-            base(name)
+        public BT_RandomNode() :
+            base("Random")
         {
-            _random = random ?? new Random();
         }
         
         protected override void OnStart()
         {
-            _current = _random.Next(0, _tasks.Length);
+            _current = Random.Range(0, _children.Count);
         }
 
         protected override BT_EStatus OnUpdate()
         {
-            var current = Current;
-            return current.Update();
+            if (_current < _children.Count)
+            {
+                var current = _children[_current];
+                return current.Update();
+            }
+
+            return BT_EStatus.Failure;
         }
     }
 }

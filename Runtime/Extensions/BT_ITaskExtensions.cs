@@ -1,14 +1,11 @@
+using System.Collections.Generic;
+
 namespace Common.BehaviourTrees
 {
     public static class BT_ITaskExtensions
     {
         public static BT_ITask FindTaskByName(this BT_ITask self, string name)
         {
-            if (self == null)
-            {
-                return null;
-            }
-
             if (self.Name == name)
             {
                 return self;
@@ -16,11 +13,8 @@ namespace Common.BehaviourTrees
 
             if (self is BT_INode node)
             {
-                var tasks = node.Tasks;
-                for (int i = 0; i < tasks.Length; ++i)
+                foreach (var task in node.GetChildren())
                 {
-                    var task = tasks[i];
-
                     var result = FindTaskByName(task, name);
                     if (result != null)
                     {
@@ -32,35 +26,24 @@ namespace Common.BehaviourTrees
             return null;
         }
 
-        public static T FindTaskByType<T>(this BT_ITask self)
+        public static IEnumerable<T> FindTasksByType<T>(this BT_ITask self)
             where T : class, BT_ITask
         {
-            if (self == null)
-            {
-                return null;
-            }
-
             if (self is T result)
             {
-                return result;
+                yield return result;
             }
 
             if (self is BT_INode node)
             {
-                var tasks = node.Tasks;
-                for (int i = 0; i < tasks.Length; ++i)
+                foreach (var task in node.GetChildren())
                 {
-                    var task = tasks[i];
-
-                    result = FindTaskByType<T>(task);
-                    if (result != null)
+                    foreach (var found in task.FindTasksByType<T>())
                     {
-                        return result;
+                        yield return found;
                     }
                 }
             }
-
-            return null;
         }
     }
 }

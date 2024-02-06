@@ -1,46 +1,45 @@
 ﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_AConditional"/> which halts a task execution after a certain amount of time passes
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Limit", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Limit : BT_AConditional
     {
-        private readonly float _limit;
-        private readonly float _deviation;
-        private readonly Random _random;
+        [SerializeField] private float _limit;
+        [SerializeField] private float _deviation;
+
+        [SerializeField] [ReadOnly] private float _remaining;
 
         private float _timestamp;
 
-        public BT_Limit(float limit, float deviation = 0.0f, Random random = null) :
+        public BT_Limit() :
+            this(0.0f, 0.0f)
+        {
+        }
+
+        public BT_Limit(float limit, float deviation = 0.0f) :
             base("Limit")
         {
             _limit = limit;
             _deviation = deviation;
-            _random = random ?? new Random();
-        }
-
-        public float Remaining
-        {
-            get => _timestamp - UTime.UtcNow;
-            set => _timestamp = UTime.UtcNow + value;
         }
 
         protected override void OnStart()
         {
-            Remaining = _limit + _random.NextFloat(-_deviation, +_deviation);
+            _remaining = _limit + Random.Range(-_deviation, +_deviation);
+            _timestamp = BT_Time.Nowstamp;
         }
 
         public override bool CanExecute()
         {
-            return Remaining > 0.0f;
-        }
-
-        public override string ToString()
-        {
-            var remaining = Math.Max(Remaining, 0.0f).ToString("F1");
-            return base.ToString() + " [" + remaining + ']';
+            _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+            return _remaining > 0.0f;
         }
     }
 }

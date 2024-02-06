@@ -1,17 +1,27 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Common.BehaviourTrees
 {
     /// <summary>
     /// <see cref="BT_ADecorator"/> which repeats a task for a certain number of times
     /// </summary>
+    [Serializable]
+    [BT_ItemMenu("Repeat", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Repeat : BT_ADecorator
     {
-        private readonly int _repeats;
+        private const int RepeatInfinitely = -1;
 
-        private int _remaining;
+        [SerializeField] private int _repeats;
 
-        public BT_Repeat(int repeats = -1) :
+        [SerializeField] [ReadOnly] private int _remaining;
+
+        public BT_Repeat() :
+            this(RepeatInfinitely)
+        {
+        }
+
+        public BT_Repeat(int repeats = RepeatInfinitely) :
             base("Repeat")
         {
             _repeats = repeats;
@@ -44,12 +54,6 @@ namespace Common.BehaviourTrees
             }
 
             return status;
-        }
-
-        public override string ToString()
-        {
-            var remaining = _remaining > -1 ? Math.Max(_remaining, 0).ToString() : "inf";
-            return base.ToString() + " [" + remaining + "]";
         }
     }
 }
