@@ -2,8 +2,8 @@
 
 ## Description
 
-Code-only simple and lightweight behaviour trees implementation.
-On the surface, it closely resembles UE Behaviour Trees implementation, but under the hood it was written with simplicity and extendability in mind.
+Simple and lightweight behaviour trees implementation that can be written entirely in code or entirely in the Inspector.
+On the surface, it closely resembles Unreal Engine Behaviour Trees implementation, but under the hood it was written with simplicity and extendability in mind.
 
 ## Installation
 
@@ -22,104 +22,111 @@ Git add this repository as a submodule inside your Unity project Assets folder:
 <summary>Cooldown</summary>
 <p>
 
-#### Cooldown example. A tree that changes _color field to a random of three options between cooldowns.
+#### Cooldown example.
+A tree that changes _color field to a random of three options and three wait values between cooldowns.
 
 ```cs
-return new BT_TreeNode()
-    .WithTask(new BT_RandomNode()
-        .WithTasks(
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.red; }),
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.green; }),
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.blue; })
-        )
-        .WithConditionals(new BT_Cooldown(2.0f))
-    );
-```
+public class CustomTask : BT_ITask
+{
+    private Action _action;
 
-</p>
-</details>
+    public CustomTask(Action action)
+    {
+        _action = action;
+    }
 
-<details>
-<summary>Wait and Limit</summary>
-<p>
+    public BT_EStatus Update()
+    {
+        _action();
+        return BT_EStatus.Success;
+    }
 
-#### Wait and Limit example. A tree that changes _color field sequentially between three values each second and halts midway last awaiter.
+    public void Abort()
+    {
+        // no-op
+    }
+}
 
-```cs
-return new BT_TreeNode()
-    .WithTask(new BT_SequenceNode()
-        .WithTasks(
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.red; }),
+private Color _color;
+
+public BT_INode CreateRoot()
+{
+    return new BT_RootNode().AddChildren(
+        new BT_RandomNode().AddChildren(
+            new CustomTask(delegate { _color = Color.Red; }),
             new BT_Wait(1.0f),
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.green; }),
+            new CustomTask(delegate { _color = Color.Green; }),
             new BT_Wait(1.0f),
-            new BT_CustomTask().WithOnStart(delegate { _color = Color.blue; }),
+            new CustomTask(delegate { _color = Color.Blue; }),
             new BT_Wait(1.0f)
+        ).AddConditionals(
+            new BT_Cooldown(1.0f)
         )
-        .WithConditionals(new BT_Limit(2.5f))
     );
+}
 ```
 
 </p>
 </details>
 
 <details>
-<summary>Custom task with context and Repeats</summary>
+<summary>Repeat</summary>
 <p>
 
-#### Repeats example with custom contextual task. A tree does in sequence:
+#### Repeats example.
+A tree does in sequence:
 1. Changes _color field to a random of three options each frame for 3 seconds.
 2. Changes _color field sequentially between three values each second 2 times.
 
 ```cs
-private class ColorContext
+public interface IColorContext
 {
-    public Color color;
+    Color Color { set; }
 }
 
-private class ChangeColorTask : BT_ATask<ColorContext>
+public class ChangeColorTask : BT_ATask
 {
-    private readonly Color _color;
+    private IColorContext _context;
+    private Color _color;
 
-    public ChangeColorTask(ColorContext context, Color color) :
-        base(context)
+    public ChangeColorTask(IColorContext context, Color color)
     {
+        _context = context;
         _color = color;
     }
 
-    protected override BT_EStatus OnExecute()
+    protected override BT_EStatus OnUpdate()
     {
-        _context.color = _color;
+        _context.Color = _color;
         return BT_EStatus.Success;
     }
 }
 
-private ColorContext _colorContext = new ColorContext();
+private IColorContext _context;
 
-private BT_ITask CreateBehaviourTree()
+private BT_ITask CreateRoot()
 {
-    return new BT_TreeNode()
-        .WithTask(new BT_SequenceNode()
-            .WithTasks(
-                new BT_RandomNode()
-                    .WithTasks(
-                        new ChangeColorTask(_colorContext, Color.red),
-                        new ChangeColorTask(_colorContext, Color.green),
-                        new ChangeColorTask(_colorContext, Color.blue)
-                    )
-                    .WithDecorators(new BT_RepeatFor(3.0f)),
-                new BT_SequenceNode()
-                    .WithTasks(
-                        new ChangeColorTask(_colorContext, Color.red),
-                        new BT_Wait(1.0f),
-                        new ChangeColorTask(_colorContext, Color.green),
-                        new BT_Wait(1.0f),
-                        new ChangeColorTask(_colorContext, Color.blue),
-                        new BT_Wait(1.0f)
-                    )
-                    .WithDecorators(new BT_Repeat(2))
+    return new BT_RootNode().AddChildren(
+        new BT_SequenceNode().AddChildren(
+            new BT_RandomNode().AddChildren(
+                new ChangeColorTask(_context, Color.red),
+                new ChangeColorTask(_context, Color.green),
+                new ChangeColorTask(_context, Color.blue)
+            ).AddDecorators(
+                new BT_RepeatFor(3.0f)
+            ),
+            new BT_SequenceNode().AddChildren(
+                new ChangeColorTask(_context, Color.red),
+                new BT_Wait(1.0f),
+                new ChangeColorTask(_context, Color.green),
+                new BT_Wait(1.0f),
+                new ChangeColorTask(_context, Color.blue),
+                new BT_Wait(1.0f)
+            ).AddDecorators(
+                new BT_Repeat(2)
             )
-        );
+        )
+    );
 }
 ```
 
