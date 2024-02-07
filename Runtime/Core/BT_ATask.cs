@@ -36,6 +36,24 @@ namespace Common.BehaviourTrees
             _services = new List<BT_IService>();
         }
 
+        public BT_ATask AddConditionals(params BT_IConditional[] conditionals)
+        {
+            _conditionals.AddRange(conditionals);
+            return this;
+        }
+
+        public BT_ATask AddDecorators(params BT_IDecorator[] decorators)
+        {
+            _decorators.AddRange(decorators);
+            return this;
+        }
+
+        public BT_ATask AddServices(params BT_IService[] services)
+        {
+            _services.AddRange(services);
+            return this;
+        }
+
         public BT_EStatus Update()
         {
             ExecuteServices();

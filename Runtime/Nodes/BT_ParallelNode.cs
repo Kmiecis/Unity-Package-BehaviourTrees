@@ -9,7 +9,7 @@ namespace Common.BehaviourTrees
     [BT_ItemMenu("Parallel", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_ParallelNode : BT_ANode
     {
-        private bool _ran;
+        private ulong _done;
 
         public BT_ParallelNode() :
             base("Parallel")
@@ -20,7 +20,7 @@ namespace Common.BehaviourTrees
         {
             base.OnStart();
 
-            _ran = false;
+            _done = 0U;
         }
 
         protected override BT_EStatus OnUpdate()
@@ -29,14 +29,11 @@ namespace Common.BehaviourTrees
 
             for (int i = _current; i < _children.Count; ++i)
             {
-                var current = _children[i];
-                if (
-                    current.Status == BT_EStatus.Running ||
-                    !_ran
-                )
+                if (!IsDone(i))
                 {
-                    var result = current.Update();
+                    var current = _children[i];
 
+                    var result = current.Update();
                     switch (result)
                     {
                         case BT_EStatus.Failure:
@@ -44,25 +41,32 @@ namespace Common.BehaviourTrees
                             break;
 
                         case BT_EStatus.Success:
+                            MarkDone(i);
                             if (_current == i)
-                            {
                                 _current += 1;
-                            }
                             break;
 
                         case BT_EStatus.Running:
                             if (status != BT_EStatus.Failure)
-                            {
                                 status = BT_EStatus.Running;
-                            }
                             break;
                     }
                 }
             }
 
-            _ran = true;
-
             return status;
+        }
+
+        private bool IsDone(int index)
+        {
+            var bit = 1U << index;
+            return (_done & bit) == bit;
+        }
+
+        private void MarkDone(int index)
+        {
+            var bit = 1U << index;
+            _done |= bit;
         }
     }
 }

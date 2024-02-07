@@ -24,6 +24,12 @@ namespace Common.BehaviourTrees
             _children = new List<BT_ITask>();
         }
 
+        public BT_ANode AddChildren(params BT_ITask[] children)
+        {
+            _children.AddRange(children);
+            return this;
+        }
+
         public IEnumerable<BT_ITask> GetChildren()
         {
             return _children;

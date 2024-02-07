@@ -81,7 +81,8 @@ namespace CommonEditor.BehaviourTrees
                     if (child.arraySize > 0 ||
                         GetForcedDrawOptions().Contains(child.name))
                     {
-                        tempMask |= (1 << index);
+                        var bit = 1 << index;
+                        tempMask |= bit;
                     }
                     index++;
                 }
@@ -104,7 +105,8 @@ namespace CommonEditor.BehaviourTrees
             var name = child.name;
 
             var index = Array.IndexOf(options, name);
-            return (mask & (1 << index)) == (1 << index);
+            var bit = 1 << index;
+            return (mask & bit) == bit;
         }
 
         private void DrawLabel(ref Rect position, GUIContent label)

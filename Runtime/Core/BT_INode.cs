@@ -11,7 +11,5 @@ namespace Common.BehaviourTrees
         /// Returns all node children
         /// </summary>
         IEnumerable<BT_ITask> GetChildren();
-
-        BT_ITask Current { get; }
     }
 }
