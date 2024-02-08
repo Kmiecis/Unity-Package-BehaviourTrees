@@ -13,7 +13,7 @@ namespace Common.BehaviourTrees
             {
                 foreach (var task in node.GetChildrenByType<BT_ATask>())
                 {
-                    var result = FindTaskByName(task, name);
+                    var result = task.FindTaskByName(name);
                     if (result != null)
                     {
                         return result;

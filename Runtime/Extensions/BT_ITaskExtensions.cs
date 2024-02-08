@@ -13,11 +13,11 @@ namespace Common.BehaviourTrees
 
             if (self is BT_INode node)
             {
-                foreach (var task in node.GetChildren())
+                foreach (var child in node.GetChildren())
                 {
-                    foreach (var found in task.GetTasksByType<T>())
+                    foreach (var task in child.GetTasksByType<T>())
                     {
-                        yield return found;
+                        yield return task;
                     }
                 }
             }

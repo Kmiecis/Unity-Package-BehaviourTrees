@@ -70,7 +70,8 @@ namespace CommonEditor.BehaviourTrees
                 if (child.arraySize > 0 ||
                     GetForcedDrawOptions().Contains(child.name))
                 {
-                    tempMask |= (1 << index);
+                    var bit = 1 << index;
+                    tempMask |= bit;
                 }
                 index++;
             }
@@ -93,7 +94,8 @@ namespace CommonEditor.BehaviourTrees
             var name = property.name;
 
             var index = Array.IndexOf(options, name);
-            return (_drawMask & (1 << index)) == (1 << index);
+            var bit = 1 << index;
+            return (_drawMask & bit) == bit;
         }
 
         private void DrawProperties()
