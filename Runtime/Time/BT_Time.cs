@@ -2,17 +2,17 @@ using UnityEngine;
 
 namespace Common.BehaviourTrees
 {
-    internal static class BT_Time
+    public static class BT_Time
     {
-        public static float Nowstamp
+        public static float Timestamp
             => Time.realtimeSinceStartup * Time.timeScale;
 
-        public static float NowstampUnscaled
+        public static float TimestampUnscaled
             => Time.realtimeSinceStartup;
 
         public static float GetDeltaTime(ref float cached)
         {
-            var nowstamp = Nowstamp;
+            var nowstamp = Timestamp;
             var result = nowstamp - cached;
             cached = nowstamp;
             return result;
@@ -20,7 +20,7 @@ namespace Common.BehaviourTrees
 
         public static float GetDeltaTimeUnscaled(ref float cached)
         {
-            var nowstamp = NowstampUnscaled;
+            var nowstamp = TimestampUnscaled;
             var result = nowstamp - cached;
             cached = nowstamp;
             return result;

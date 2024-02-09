@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_AService"/> which sends a message using <see cref="Debug.LogError"/>
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Error", BT_MenuPath.Debug, BT_MenuGroup.Debug + 2)]
+    [BT_Menu("Error", BT_MenuPath.Debug, BT_MenuGroup.Debug + 2)]
     public sealed class BT_ErrorService : BT_AService
     {
         [SerializeField] private string _message;

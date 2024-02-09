@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ADecorator"/> which overrides a task execution result
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Status", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Status", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Status : BT_ADecorator
     {
         [SerializeField] private BT_EStatus _status;

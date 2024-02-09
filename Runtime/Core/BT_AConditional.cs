@@ -26,6 +26,7 @@ namespace Common.BehaviourTrees
             if (!_started)
             {
                 OnStart();
+
                 _started = true;
             }
         }
@@ -37,6 +38,7 @@ namespace Common.BehaviourTrees
             if (_started)
             {
                 OnFinish(status);
+
                 _started = false;
             }
         }

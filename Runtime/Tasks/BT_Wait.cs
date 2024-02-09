@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ATask"/> which executes for a certain amount of time
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Wait", BT_MenuPath.Task, BT_MenuGroup.Core)]
+    [BT_Menu("Wait", BT_MenuPath.Task, BT_MenuGroup.Core)]
     public sealed class BT_Wait : BT_ATask
     {
         [SerializeField] private float _duration;
@@ -33,7 +33,7 @@ namespace Common.BehaviourTrees
         protected override void OnStart()
         {
             _remaining = _duration + Random.Range(-_deviation, +_deviation);
-            _timestamp = BT_Time.Nowstamp;
+            _timestamp = BT_Time.Timestamp;
         }
 
         protected override BT_EStatus OnUpdate()

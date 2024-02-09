@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ATimedService"/> with <see cref="UnityEvent"/> support
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Timed Events", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Timed Events", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_TimedEventsService : BT_ATimedService
     {
         [SerializeField] private UnityEvent _events;

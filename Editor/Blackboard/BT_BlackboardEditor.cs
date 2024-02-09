@@ -13,12 +13,12 @@ namespace CommonEditor.BehaviourTrees
 
         private SerializedProperty _rootProperty;
 
-        private Dictionary<string, BT_ItemMenu> _itemMenus;
+        private Dictionary<string, BT_Menu> _itemMenus;
         private int _drawMask;
 
         public BT_BlackboardEditor()
         {
-            _itemMenus = new Dictionary<string, BT_ItemMenu>();
+            _itemMenus = new Dictionary<string, BT_Menu>();
         }
 
         public override void OnInspectorGUI()
@@ -56,7 +56,7 @@ namespace CommonEditor.BehaviourTrees
         {
             foreach (var child in GetChildren(true))
             {
-                _itemMenus[child.name] = new BT_ItemMenu(child);
+                _itemMenus[child.name] = new BT_Menu(child);
             }
         }
 

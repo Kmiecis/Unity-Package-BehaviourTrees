@@ -6,7 +6,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ANode"/> which executes its child tasks in sequence until one fail or all succeed
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Sequence", BT_MenuPath.Node, BT_MenuGroup.Core)]
+    [BT_Menu("Sequence", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_SequenceNode : BT_ANode
     {
         public BT_SequenceNode() :

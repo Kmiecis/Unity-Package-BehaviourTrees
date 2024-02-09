@@ -42,13 +42,9 @@ namespace Common.BehaviourTrees
 
         protected override void OnFinish()
         {
-            AbortChildren();
-        }
-
-        protected void AbortChildren()
-        {
-            foreach (var child in _children)
+            for (int i = 0; i < _children.Count; ++i)
             {
+                var child = _children[i];
                 child.Abort();
             }
         }

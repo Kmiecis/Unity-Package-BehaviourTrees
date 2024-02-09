@@ -6,7 +6,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ANode"/> serving as a root of the tree
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Root", BT_MenuPath.Node, BT_MenuGroup.Core)]
+    [BT_Menu("Root", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_RootNode : BT_ANode
     {
         public BT_RootNode() :

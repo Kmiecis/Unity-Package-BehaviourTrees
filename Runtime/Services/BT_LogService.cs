@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_AService"/> which sends a message using <see cref="Debug.Log"/>
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Log", BT_MenuPath.Debug, BT_MenuGroup.Debug + 0)]
+    [BT_Menu("Log", BT_MenuPath.Debug, BT_MenuGroup.Debug + 0)]
     public sealed class BT_LogService : BT_AService
     {
         [SerializeField] private string _message;

@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ADecorator"/> which repeats a task for a certain number of times
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Repeat", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Repeat", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Repeat : BT_ADecorator
     {
         private const int RepeatInfinitely = -1;

@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_AService"/> which pauses the editor using <see cref="Debug.Break"/>
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Break", BT_MenuPath.Debug, BT_MenuGroup.Debug + 3)]
+    [BT_Menu("Break", BT_MenuPath.Debug, BT_MenuGroup.Debug + 3)]
     public sealed class BT_BreakService : BT_AService
     {
         public BT_BreakService() :

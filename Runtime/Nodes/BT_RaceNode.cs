@@ -6,7 +6,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ANode"/> which executes its child tasks in parallel until one succeed or all fail
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Race", BT_MenuPath.Node, BT_MenuGroup.Core)]
+    [BT_Menu("Race", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_RaceNode : BT_ANode
     {
         private ulong _done;

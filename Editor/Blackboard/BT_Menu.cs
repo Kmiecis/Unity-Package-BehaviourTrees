@@ -5,42 +5,43 @@ using UnityEngine;
 using System.Linq;
 using Common.BehaviourTrees;
 using System.Reflection;
-using System.Collections;
 
 namespace CommonEditor.BehaviourTrees
 {
-    public class BT_ListMenu
+    public class BT_Menu
     {
         private class EntryData
         {
-            public string menuPath;
             public string fileName;
+            public string menuPath;
             public Type type;
         }
 
-        private readonly IList _list;
+        private readonly SerializedProperty _property;
         private readonly Type _type;
 
         private int _count;
 
-        public BT_ListMenu(IList list)
+        public BT_Menu(SerializedProperty property)
         {
-            _list = list;
-            _type = list.GetType().GetGenericArguments()[0];
+            _property = property.Copy();
 
-            _count = list.Count;
+            var assembly = Assembly.Load($"{nameof(Common)}.{nameof(BehaviourTrees)}");
+            _type = assembly.FindType(property.type);
+
+            _count = property.arraySize;
         }
 
         public void OnGUI()
         {
-            var current = _list.Count;
+            var current = _property.arraySize;
             if (current > _count)
             {
-                var last = _list[_list.Count - 1];
+                var last = _property.GetLastArrayElement();
 
-                if (last == null)
+                if (last.managedReferenceValue == null)
                 {
-                    _list.RemoveAt(_list.Count - 1);
+                    _property.DeleteLastArrayElement();
 
                     ShowAddMenu();
                 }
@@ -65,7 +66,8 @@ namespace CommonEditor.BehaviourTrees
             return (
                 type.HasInterface(_type) &&
                 !type.IsInterface &&
-                !type.IsAbstract
+                !type.IsAbstract &&
+                !type.IsSubclassOf(typeof(MonoBehaviour))
             );
         }
 
@@ -78,16 +80,16 @@ namespace CommonEditor.BehaviourTrees
             var types = AppDomain.CurrentDomain.FindTypes(IsValidType);
             foreach (var type in types)
             {
-                var attribute = type.GetCustomAttribute<BT_ItemMenuAttribute>();
+                var attribute = type.GetCustomAttribute<BT_MenuAttribute>();
 
-                var menuPath = attribute.GetMenuPathOrDefault();
                 var fileName = attribute.GetFileNameOrDefault(type.Name);
+                var menuPath = attribute.GetMenuPathOrDefault();
                 var group = attribute.GetGroupOrDefault();
 
                 var data = new EntryData
                 {
-                    menuPath = menuPath,
                     fileName = fileName,
+                    menuPath = menuPath,
                     type = type
                 };
 
@@ -124,21 +126,23 @@ namespace CommonEditor.BehaviourTrees
         {
             var instance = CreateObjectOfType((Type)type);
 
-            _list.Add(instance);
+            var added = _property.AddArrayElement();
+            added.isExpanded = true;
+            added.managedReferenceValue = instance;
 
-            _count = _list.Count;
+            _property.serializedObject.ApplyModifiedProperties();
+
+            _count = _property.arraySize;
         }
 
-        private void Replace(object item)
+        private void Replace(SerializedProperty item)
         {
-            var index = _list.IndexOf(item);
-            _list.RemoveAt(index);
+            var oldValue = item.managedReferenceValue;
 
-            var replace = CreateObjectOfType(item.GetType());
-            _list.Insert(index, replace);
-            _count = _list.Count;
+            var newValue = CreateObjectOfType(oldValue.GetType());
+            EditorUtility.CopySerializedManagedFieldsOnly(oldValue, newValue);
 
-            EditorUtility.CopySerializedManagedFieldsOnly(item, replace);
+            item.managedReferenceValue = newValue;
         }
 
         private object CreateObjectOfType(Type type)
@@ -146,10 +150,10 @@ namespace CommonEditor.BehaviourTrees
             return Activator.CreateInstance(type);
         }
 
-        private object FindDuplicate()
+        private SerializedProperty FindDuplicate()
         {
-            var previous = (object)null;
-            foreach (var child in _list)
+            var previous = (SerializedProperty)null;
+            foreach (var child in _property.GetChildren())
             {
                 if (Equals(previous, child))
                 {

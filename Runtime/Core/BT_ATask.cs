@@ -19,7 +19,10 @@ namespace Common.BehaviourTrees
         [Tooltip("Services run along with the task.\nA task will not be affected directly by any of the services.")]
         [SerializeReference] protected List<BT_IService> _services;
 
-        protected BT_EStatus _status;
+        [HideInInspector] [SerializeField] protected BT_EStatus _status;
+#if UNITY_EDITOR
+        [HideInInspector] [SerializeField] private float _updated;
+#endif
 
         public string Name
             => _name;
@@ -56,6 +59,9 @@ namespace Common.BehaviourTrees
 
         public BT_EStatus Update()
         {
+#if UNITY_EDITOR
+            _updated = BT_Time.TimestampUnscaled;
+#endif
             ExecuteServices();
 
             if (_status != BT_EStatus.Running)
@@ -112,9 +118,9 @@ namespace Common.BehaviourTrees
         {
             if (_status == BT_EStatus.Running)
             {
-                _status = BT_EStatus.Failure;
-
                 Finish();
+
+                _status = BT_EStatus.Failure;
             }
         }
 

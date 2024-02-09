@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_AConditional"/> which prevents a task execution until a certain amount of time passes
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Cooldown", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Cooldown", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Cooldown : BT_AConditional
     {
         [SerializeField] private float _cooldown;
@@ -32,7 +32,7 @@ namespace Common.BehaviourTrees
 
         protected override void OnStart()
         {
-            _timestamp = BT_Time.Nowstamp;
+            _timestamp = BT_Time.Timestamp;
         }
 
         public override bool CanExecute()

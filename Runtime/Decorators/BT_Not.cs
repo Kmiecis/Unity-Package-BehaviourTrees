@@ -6,7 +6,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ADecorator"/> which negates a task execution result
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Not", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Not", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Not : BT_ADecorator
     {
         public BT_Not() :

@@ -7,7 +7,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ANode"/> which executes a random child task as long as it is running
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Random", BT_MenuPath.Node, BT_MenuGroup.Core)]
+    [BT_Menu("Random", BT_MenuPath.Node, BT_MenuGroup.Core)]
     public sealed class BT_RandomNode : BT_ANode
     {
         public BT_RandomNode() :

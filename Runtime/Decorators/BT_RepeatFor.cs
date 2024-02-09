@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_ADecorator"/> which repeats a task for a certain amount of time
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Repeat For", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Repeat For", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_RepeatFor : BT_ADecorator
     {
         [SerializeField] private float _duration;
@@ -38,7 +38,7 @@ namespace Common.BehaviourTrees
                 _repeating = true;
 
                 _remaining = _duration + Random.Range(-_deviation, +_deviation);
-                _timestamp = BT_Time.Nowstamp;
+                _timestamp = BT_Time.Timestamp;
             }
         }
 

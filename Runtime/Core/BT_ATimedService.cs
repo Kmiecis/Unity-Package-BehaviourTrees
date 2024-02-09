@@ -21,7 +21,7 @@ namespace Common.BehaviourTrees
 
         public override void Update()
         {
-            var nowstamp = BT_Time.Nowstamp;
+            var nowstamp = BT_Time.Timestamp;
             if (_timestamp > nowstamp)
             {
                 return;

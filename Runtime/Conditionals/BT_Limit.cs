@@ -8,7 +8,7 @@ namespace Common.BehaviourTrees
     /// <see cref="BT_AConditional"/> which halts a task execution after a certain amount of time passes
     /// </summary>
     [Serializable]
-    [BT_ItemMenu("Limit", BT_MenuPath.Core, BT_MenuGroup.Core)]
+    [BT_Menu("Limit", BT_MenuPath.Core, BT_MenuGroup.Core)]
     public sealed class BT_Limit : BT_AConditional
     {
         [SerializeField] private float _limit;
@@ -33,7 +33,7 @@ namespace Common.BehaviourTrees
         protected override void OnStart()
         {
             _remaining = _limit + Random.Range(-_deviation, +_deviation);
-            _timestamp = BT_Time.Nowstamp;
+            _timestamp = BT_Time.Timestamp;
         }
 
         public override bool CanExecute()

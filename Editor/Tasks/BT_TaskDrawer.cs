@@ -14,12 +14,12 @@ namespace CommonEditor.BehaviourTrees
 
         protected static readonly string[] TaskDrawOptions = new string[] { "_conditionals", "_decorators", "_services" };
 
-        private readonly Dictionary<object, BT_ItemMenu> _itemMenus;
+        private readonly Dictionary<object, BT_Menu> _itemMenus;
         private readonly Dictionary<object, int> _drawMasks;
 
         public BT_TaskDrawer()
         {
-            _itemMenus = new Dictionary<object, BT_ItemMenu>();
+            _itemMenus = new Dictionary<object, BT_Menu>();
             _drawMasks = new Dictionary<object, int>();
         }
 
@@ -28,6 +28,7 @@ namespace CommonEditor.BehaviourTrees
             DrawLabel(ref position, label);
             DrawChoices(ref position, property);
             DrawChildren(ref position, property);
+            DrawStatus(position, property);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -59,19 +60,19 @@ namespace CommonEditor.BehaviourTrees
             return result;
         }
 
-        private BT_ItemMenu GetMenu(SerializedProperty property)
+        private BT_Menu GetMenu(SerializedProperty property)
         {
-            var key = property.GetValue();
+            var key = property.propertyPath;
             if (!_itemMenus.TryGetValue(key, out var menu))
             {
-                _itemMenus[key] = menu = new BT_ItemMenu(property);
+                _itemMenus[key] = menu = new BT_Menu(property);
             }
             return menu;
         }
 
         private int GetDrawMask(SerializedProperty property)
         {
-            var key = property.GetValue();
+            var key = property.propertyPath;
             if (!_drawMasks.TryGetValue(key, out int mask))
             {
                 var tempMask = 0;
@@ -94,7 +95,7 @@ namespace CommonEditor.BehaviourTrees
 
         private void SetDrawMask(SerializedProperty property, int mask)
         {
-            var key = property.GetValue();
+            var key = property.propertyPath;
             _drawMasks[key] = mask;
         }
 
@@ -191,6 +192,46 @@ namespace CommonEditor.BehaviourTrees
         private float GetPropertyHeight(SerializedProperty property)
         {
             return EditorGUI.GetPropertyHeight(property, true) + SpaceHeight;
+        }
+
+        private BT_EStatus GetStatus(SerializedProperty property)
+        {
+            var statusProperty = property.FindPropertyRelative("_status");
+            return statusProperty != null ? (BT_EStatus)statusProperty.enumValueIndex : BT_EStatus.Failure;
+        }
+
+        private float GetTimestamp(SerializedProperty property)
+        {
+            var timestampProperty = property.FindPropertyRelative("_updated");
+            return timestampProperty != null ? timestampProperty.floatValue : -1.0f;
+        }
+
+        private Color GetStatusColor(BT_EStatus status)
+        {
+            switch (status)
+            {
+                case BT_EStatus.Failure: return Color.red;
+                case BT_EStatus.Success: return Color.green;
+                case BT_EStatus.Running: return Color.yellow;
+            }
+            return Color.black;
+        }
+
+        private void DrawStatus(Rect position, SerializedProperty property)
+        {
+            var status = GetStatus(property);
+            var timestamp = GetTimestamp(property);
+
+            var deltaTime = BT_Time.TimestampUnscaled - timestamp;
+            var statusColor = GetStatusColor(status);
+            var color = Color.Lerp(statusColor, Color.clear, deltaTime);
+
+            position.width = 10.0f;
+            position.x -= position.width + 3.0f;
+            position.height = GetPropertyHeight(property, null) - EditorGUIUtility.singleLineHeight;
+            position.y -= position.height;
+
+            EditorGUI.DrawRect(position, color);
         }
 
         private IEnumerable<SerializedProperty> GetChildren(SerializedProperty property, bool drawn)
