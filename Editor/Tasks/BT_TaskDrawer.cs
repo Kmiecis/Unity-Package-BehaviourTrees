@@ -135,7 +135,7 @@ namespace CommonEditor.BehaviourTrees
                     SetDrawMask(property, newMask);
                 }
 
-                position.y += EditorGUIUtility.singleLineHeight + SpaceHeight;
+                position.y += position.height + SpaceHeight;
             }
         }
 
@@ -182,11 +182,11 @@ namespace CommonEditor.BehaviourTrees
 
         private void DrawProperty(ref Rect position, SerializedProperty property)
         {
-            var height = EditorGUI.GetPropertyHeight(property, true);
+            position.height = EditorGUI.GetPropertyHeight(property, true);
 
             EditorGUI.PropertyField(position, property, true);
 
-            position.y += height + SpaceHeight;
+            position.y += position.height + SpaceHeight;
         }
 
         private float GetPropertyHeight(SerializedProperty property)
