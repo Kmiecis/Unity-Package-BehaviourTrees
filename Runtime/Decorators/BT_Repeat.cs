@@ -14,7 +14,7 @@ namespace Common.BehaviourTrees
 
         [SerializeField] private int _repeats;
 
-        [SerializeField] [ReadOnly] private int _remaining;
+        [SerializeField] [ReadOnly] [RuntimeOnly] private int _remaining;
 
         public BT_Repeat() :
             this(RepeatInfinitely)

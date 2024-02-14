@@ -14,7 +14,7 @@ namespace Common.BehaviourTrees
         [SerializeField] private float _limit;
         [SerializeField] private float _deviation;
 
-        [SerializeField] [ReadOnly] private float _remaining;
+        [SerializeField] [ReadOnly] [RuntimeOnly] private float _remaining;
 
         public BT_Limit() :
             this(0.0f, 0.0f)

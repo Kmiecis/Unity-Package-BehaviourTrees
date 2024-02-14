@@ -14,7 +14,7 @@ namespace Common.BehaviourTrees
         [SerializeField] private float _duration;
         [SerializeField] private float _deviation;
 
-        [SerializeField] [ReadOnly] private float _remaining;
+        [SerializeField] [ReadOnly] [RuntimeOnly] private float _remaining;
 
         private bool _repeating;
 
