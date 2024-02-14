@@ -7,7 +7,7 @@ using UnityEngine;
 namespace CommonEditor.BehaviourTrees
 {
     [CustomPropertyDrawer(typeof(BT_ATask), true)]
-    public class BT_TaskDrawer : PropertyDrawer
+    public class BT_ATaskDrawer : PropertyDrawer
     {
         private const float SpaceHeight = 2.0f;
         private const float IndentWidth = 10.0f;
@@ -17,7 +17,7 @@ namespace CommonEditor.BehaviourTrees
         private readonly Dictionary<object, BT_Menu> _itemMenus;
         private readonly Dictionary<object, int> _drawMasks;
 
-        public BT_TaskDrawer()
+        public BT_ATaskDrawer()
         {
             _itemMenus = new Dictionary<object, BT_Menu>();
             _drawMasks = new Dictionary<object, int>();
@@ -116,7 +116,7 @@ namespace CommonEditor.BehaviourTrees
             position.width += IndentWidth;
             position.height = EditorGUIUtility.singleLineHeight;
 
-            EditorGUI.LabelField(position, label);
+            EditorGUI.LabelField(position, label, EditorStyles.boldLabel);
         }
 
         private void DrawChoices(ref Rect position, SerializedProperty property)

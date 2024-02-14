@@ -13,11 +13,11 @@ namespace Common.BehaviourTrees
         [HideInInspector] [SerializeField] protected string _name;
 
         [Tooltip("Conditionals affect the task execution availability.\nA task will only be executed once all conditions pass.")]
-        [Unfolded] [SerializeReference] protected List<BT_IConditional> _conditionals;
+        [SerializeReference] protected List<BT_IConditional> _conditionals;
         [Tooltip("Decorators alter the task result status.\nA task will have its status ran through all decorators.")]
-        [Unfolded] [SerializeReference] protected List<BT_IDecorator> _decorators;
+        [SerializeReference] protected List<BT_IDecorator> _decorators;
         [Tooltip("Services run along with the task.\nA task will not be affected directly by any of the services.")]
-        [Unfolded] [SerializeReference] protected List<BT_IService> _services;
+        [SerializeReference] protected List<BT_IService> _services;
 
         [HideInInspector] [SerializeField] protected BT_EStatus _status;
 #if UNITY_EDITOR

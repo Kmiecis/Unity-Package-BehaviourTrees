@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace CommonEditor.BehaviourTrees
 {
-    public class BT_Menu
+    internal class BT_Menu
     {
         private class EntryData
         {
