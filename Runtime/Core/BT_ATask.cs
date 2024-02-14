@@ -60,7 +60,7 @@ namespace Common.BehaviourTrees
         public BT_EStatus Update()
         {
 #if UNITY_EDITOR
-            _updated = BT_Time.TimestampUnscaled;
+            _updated = Time.realtimeSinceStartup;
 #endif
             ExecuteServices();
 

@@ -17,7 +17,6 @@ namespace Common.BehaviourTrees
         [SerializeField] [ReadOnly] private float _remaining;
 
         private bool _repeating;
-        private float _timestamp;
 
         public BT_RepeatFor() :
             this(0.0f, 0.0f)
@@ -38,7 +37,6 @@ namespace Common.BehaviourTrees
                 _repeating = true;
 
                 _remaining = _duration + Random.Range(-_deviation, +_deviation);
-                _timestamp = BT_Time.Timestamp;
             }
         }
 
@@ -46,7 +44,7 @@ namespace Common.BehaviourTrees
         {
             if (status != BT_EStatus.Running)
             {
-                _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+                _remaining -= Time.deltaTime;
                 if (_remaining > 0.0f)
                 {
                     return BT_EStatus.Running;

@@ -16,8 +16,6 @@ namespace Common.BehaviourTrees
 
         [SerializeField] [ReadOnly] private float _remaining;
 
-        private float _timestamp;
-
         public BT_Cooldown() :
             this(0.0f, 0.0f)
         {
@@ -30,14 +28,9 @@ namespace Common.BehaviourTrees
             _deviation = deviation;
         }
 
-        protected override void OnStart()
-        {
-            _timestamp = BT_Time.Timestamp;
-        }
-
         public override bool CanExecute()
         {
-            _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+            _remaining -= Time.deltaTime;
             return _remaining <= 0.0f;
         }
 

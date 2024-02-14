@@ -222,7 +222,7 @@ namespace CommonEditor.BehaviourTrees
             var status = GetStatus(property);
             var timestamp = GetTimestamp(property);
 
-            var deltaTime = BT_Time.TimestampUnscaled - timestamp;
+            var deltaTime = Time.realtimeSinceStartup - timestamp;
             var statusColor = GetStatusColor(status);
             var color = Color.Lerp(statusColor, Color.clear, deltaTime);
 

@@ -16,8 +16,6 @@ namespace Common.BehaviourTrees
 
         [SerializeField] [ReadOnly] private float _remaining;
 
-        private float _timestamp;
-
         public BT_Wait() :
             this(0.0f, 0.0f)
         {
@@ -33,12 +31,11 @@ namespace Common.BehaviourTrees
         protected override void OnStart()
         {
             _remaining = _duration + Random.Range(-_deviation, +_deviation);
-            _timestamp = BT_Time.Timestamp;
         }
 
         protected override BT_EStatus OnUpdate()
         {
-            _remaining -= BT_Time.GetDeltaTime(ref _timestamp);
+            _remaining -= Time.deltaTime;
             if (_remaining > 0.0f)
             {
                 return BT_EStatus.Running;

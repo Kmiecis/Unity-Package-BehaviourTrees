@@ -11,7 +11,7 @@ namespace Common.BehaviourTrees
     {
         [SerializeField] protected float _delay;
 
-        protected float _timestamp;
+        protected float _remaining;
 
         public BT_ATimedService(float delay = 0.1f, string name = "Timed") :
             base(name)
@@ -21,13 +21,13 @@ namespace Common.BehaviourTrees
 
         public override void Update()
         {
-            var nowstamp = BT_Time.Timestamp;
-            if (_timestamp > nowstamp)
+            _remaining -= Time.deltaTime;
+            if (_remaining > 0.0f)
             {
                 return;
             }
 
-            _timestamp = nowstamp + _delay;
+            _remaining = _delay;
             OnUpdate();
         }
     }
