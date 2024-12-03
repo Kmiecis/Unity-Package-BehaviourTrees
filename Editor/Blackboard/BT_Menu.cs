@@ -20,10 +20,17 @@ namespace CommonEditor.BehaviourTrees
                 => this.group - other.group;
         }
 
+        private static Dictionary<Type, Type[]> _types;
+
         private readonly SerializedProperty _property;
         private readonly Type _type;
 
         private int _count;
+
+        static BT_Menu()
+        {
+            _types = new Dictionary<Type, Type[]>();
+        }
 
         public BT_Menu(SerializedProperty property)
         {
@@ -45,7 +52,7 @@ namespace CommonEditor.BehaviourTrees
                 if (last.managedReferenceValue == null)
                 {
                     _property.DeleteLastArrayElement();
-
+                    
                     ShowAddMenu();
                 }
                 else
@@ -64,6 +71,13 @@ namespace CommonEditor.BehaviourTrees
             }
         }
 
+        private Type[] GetValidTypes()
+        {
+            if (!_types.TryGetValue(_type, out var types))
+                _types[_type] = types = AppDomain.CurrentDomain.FindTypes(IsValidType).ToArray();
+            return types;
+        }
+
         private bool IsValidType(Type type)
         {
             return (
@@ -80,7 +94,7 @@ namespace CommonEditor.BehaviourTrees
 
             var map = new Dictionary<int, List<EntryData>>();
 
-            var types = AppDomain.CurrentDomain.FindTypes(IsValidType);
+            var types = GetValidTypes();
             foreach (var type in types)
             {
                 var attribute = type.GetCustomAttribute<BT_MenuAttribute>();

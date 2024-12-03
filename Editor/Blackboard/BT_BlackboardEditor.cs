@@ -56,7 +56,7 @@ namespace CommonEditor.BehaviourTrees
         {
             foreach (var child in GetChildren(true))
             {
-                _itemMenus[child.name] = new BT_Menu(child);
+                _itemMenus[child.propertyPath] = new BT_Menu(child);
             }
         }
 
@@ -106,7 +106,7 @@ namespace CommonEditor.BehaviourTrees
                 {
                     DrawProperty(child);
 
-                    var menu = _itemMenus[child.name];
+                    var menu = _itemMenus[child.propertyPath];
                     menu.OnGUI();
                 }
             }
